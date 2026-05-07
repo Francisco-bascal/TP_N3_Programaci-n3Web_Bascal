@@ -1,0 +1,65 @@
+﻿@model IEnumerable<APP_PRUEBA_1.Models.Departamento>
+
+@if (TempData["Errores"] != null)
+{
+    var errores = TempData["Errores"].ToString().Split("|");
+
+    <div class="alert alert-danger">
+        <ul>
+            @foreach (var error in errores)
+            {
+                <li>@error</li>
+            }
+        </ul>
+    </div>
+}
+
+<h1 class="text-center mb-3">Departamentos</h1>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <form method="get" asp-action="GetDepartamentoByNameOrId" class="d-flex">
+        <input type="text" name="busqueda" class="form-control me-2"
+               placeholder="Buscar por nombre o id" />
+        <button type="submit" class="btn btn-primary">Buscar</button>
+    </form>
+
+    <a asp-action="Create" class="btn btn-primary">Nuevo Departamento</a>
+</div>
+
+<table class="table table-bordered table-striped table-hover">
+    <thead class="table-dark text-light">
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Ubicación</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var dep in Model)
+        {
+            <tr>
+                <td>@dep.IdDepartamento</td>
+                <td>@dep.Nombre</td>
+                <td>@dep.Ubicacion</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@dep.IdDepartamento" class="btn btn-warning btn-sm">
+                        Editar
+                    </a>
+
+                    <form asp-action="DeleteDepartamento" method="post" style="display:inline;">
+                        <input type="hidden" name="id" value="@dep.IdDepartamento" />
+                        <button type="submit" class="btn btn-danger btn-sm"
+                                onclick="return confirm('¿Eliminar departamento?');">
+                            Eliminar
+                        </button>
+                    </form>
+
+                    <a asp-action="GetDepartamentoById" asp-route-id="@dep.IdDepartamento" class="btn btn-primary btn-sm">
+                        Detalles
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

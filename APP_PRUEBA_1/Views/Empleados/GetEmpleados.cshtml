@@ -1,0 +1,114 @@
+﻿@model IEnumerable<APP_PRUEBA_1.Models.Empleado>
+
+@if (TempData["Errores"] != null)
+{
+    var errores = TempData["Errores"].ToString().Split("|");
+
+    <div class="alert alert-danger">
+        <ul>
+            @foreach (var error in errores)
+            {
+                <li>@error</li>
+            }
+        </ul>
+    </div>
+}
+
+<h1 class="text-center mb-3">Empleados</h1>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+
+    <form method="get" asp-action="GetEmpleadosFiltro" class="d-flex">
+        <input type="text" name="busqueda" class="form-control me-2"
+               placeholder="Buscar por nombre o apellido" />
+        <button type="submit" class="btn btn-primary">Buscar</button>
+    </form>
+
+    <a asp-action="Create" class="btn btn-primary">Nuevo Empleado</a>
+
+</div>
+
+<table class="table table-bordered table-striped table-hover">
+    <thead class="table-dark text-light">
+        <tr>
+            <th>ID</th>
+            <th>DNI</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Estado</th>
+            <th>Fecha Ingreso</th>
+            <th>Cantidad de Hijos</th>
+            <th>Departamento</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var emp in Model)
+        {
+            <tr>
+                <td>@emp.IdEmpleado</td>
+                <td>@emp.Dni</td>
+                <td>@emp.Nombre</td>
+                <td>@emp.Apellido</td>
+                <td>@(emp.Estado ? "Activo" : "Inactivo")</td>
+                <td>@(emp.FechaIngreso.HasValue ? emp.FechaIngreso.Value.ToShortDateString() : "")</td>
+                <td>@emp.CantidadHijos</td>
+                <td>@emp.IdDepartamentoNavigation?.Nombre</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@emp.IdEmpleado" class="btn btn-warning btn-sm">
+                        Editar
+                    </a>
+
+                    <form asp-action="DeleteEmpleado" method="post" style="display:inline;">
+                        <input type="hidden" name="id" value="@emp.IdEmpleado" />
+                        <button type="submit" class="btn btn-danger btn-sm"
+                                onclick="return confirm('¿Eliminar empleado?');">
+                            Eliminar
+                        </button>
+                    </form>
+
+                    <a asp-action="GetEmpleadoById" asp-route-id="@emp.IdEmpleado" class="btn btn-primary btn-sm">
+                        Detalles
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@*
+<h2>Empleados</h2>
+
+<div class="row">
+    @foreach (var emp in Model)
+    {
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        @emp.Nombre @emp.Apellido
+                    </h5>
+
+                    <p class="card-text">
+                        <strong>ID:</strong> @emp.IdEmpleado <br />
+                        <strong>Ingreso:</strong> @emp.FechaIngreso.ToShortDateString() <br />
+                        <strong>Depto:</strong> @emp.IdDepartamento
+                    </p>
+
+                    <a asp-action="Edit" asp-route-id="@emp.IdEmpleado"
+                       class="btn btn-warning btn-sm">
+                        Editar
+                    </a>
+
+                    <form asp-action="DeleteEmpleadoAsync" method="post" style="display:inline;">
+                        <input type="hidden" name="id" value="@emp.IdEmpleado" />
+                        <button type="submit" class="btn btn-danger btn-sm">
+                            Eliminar
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+*@

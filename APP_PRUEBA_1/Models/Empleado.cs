@@ -1,0 +1,39 @@
+﻿#nullable disable
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
+
+namespace APP_PRUEBA_1.Models;
+
+[Index("Dni", Name = "UQ__Empleado__C035B8DDF02C0618", IsUnique = true)]
+public partial class Empleado
+{
+    [Key]
+    public int IdEmpleado { get; set; }
+
+    [Column("DNI")]
+    public int Dni { get; set; }
+    [Required]
+    public bool Estado { get; set; }
+
+    [Required]
+    [StringLength(80)]
+    [Unicode(false)]
+    public string Nombre { get; set; }
+
+    [Required]
+    [StringLength(80)]
+    [Unicode(false)]
+    public string Apellido { get; set; }
+    public DateOnly? FechaIngreso { get; set; }
+    [Required]
+    public int CantidadHijos { get; set; }
+    [Required]
+    public int IdDepartamento { get; set; }
+
+    [ForeignKey("IdDepartamento")]
+    [InverseProperty("Empleados")]
+    public virtual Departamento IdDepartamentoNavigation { get; set; }
+}

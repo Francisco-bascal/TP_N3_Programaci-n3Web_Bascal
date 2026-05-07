@@ -1,0 +1,35 @@
+﻿@model IEnumerable<APP_PRUEBA_1.Models.ViewModels.EmpleadosPorDepartamentoVM>
+
+@if (TempData["Errores"] != null)
+{
+    var errores = TempData["Errores"].ToString().Split("|");
+
+    <div class="alert alert-danger">
+        <ul>
+            @foreach (var error in errores)
+            {
+                <li>@error</li>
+            }
+        </ul>
+    </div>
+}
+
+<h2 class="text-center pb-3">Empleados por Departamento</h2>
+
+<table class="table table-striped table-hover">
+    <thead class="table-dark text-light">
+        <tr>
+            <th>Departamento</th>
+            <th>Cantidad Empleados</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var depa in Model)
+        {
+            <tr>
+                <td>@depa.Departamento</td>
+                <td>@depa.CantidadEmpleados</td>
+            </tr>
+        }
+    </tbody>
+</table>
