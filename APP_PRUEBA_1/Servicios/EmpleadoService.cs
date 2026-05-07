@@ -31,12 +31,16 @@ namespace APP_PRUEBA_1.Servicios
         }
 
         //Servicio para filtro de búsqueda ↨
-        public async Task<Result<ICollection<Empleado>>> GetEmpleadosByNombreOApellidoAsync(string busqueda) 
+        public async Task<Result<ICollection<Empleado>>> GetEmpleadosFiltradosAsync(string? busqueda, int? departamentoId) 
         {
-            if (string.IsNullOrWhiteSpace(busqueda)) return Result<ICollection<Empleado>>.Failure("El filtro de búsqueda no puede estar vacío");
-            if (busqueda.Length > 50) return Result<ICollection<Empleado>>.Failure("La búsqueda de un empleado no puede superar los 50 caracteres");
-         
-            var empleados = await _repositorio.GetEmpleadosByNameOrLastNameAsync(busqueda);
+            var empleados = await _repositorio.GetEmpleadosAsync();
+
+            if (!string.IsNullOrWhiteSpace(busqueda))
+                empleados = empleados.Where(e => e.Nombre.Contains(busqueda, StringComparison.OrdinalIgnoreCase) || e.Apellido.Contains(busqueda, StringComparison.OrdinalIgnoreCase)).ToList();
+
+            if (departamentoId.HasValue) 
+                empleados = empleados.Where(e => e.IdDepartamento.Equals(departamentoId.Value)).ToList();
+
             return Result<ICollection<Empleado>>.Success(empleados);
         }
         //Servicio para filtro de búsqueda ↨
@@ -79,3 +83,14 @@ namespace APP_PRUEBA_1.Servicios
         }
     }
 }
+
+/*
+  public async Task<Result<ICollection<Empleado>>> GetEmpleadosFiltradosAsync(string? busqueda, int? departamentoId) 
+        {
+            if (string.IsNullOrWhiteSpace(busqueda)) return Result<ICollection<Empleado>>.Failure("El filtro de búsqueda no puede estar vacío");
+            if (busqueda.Length > 50) return Result<ICollection<Empleado>>.Failure("La búsqueda de un empleado no puede superar los 50 caracteres");
+         
+            var empleados = await _repositorio.GetEmpleadosByNameOrLastNameAsync(busqueda);
+            return Result<ICollection<Empleado>>.Success(empleados);
+        }
+ */

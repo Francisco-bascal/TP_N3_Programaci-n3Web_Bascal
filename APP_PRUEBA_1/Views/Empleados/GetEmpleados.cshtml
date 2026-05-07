@@ -18,9 +18,29 @@
 
 <div class="d-flex justify-content-between align-items-center mb-3">
 
-    <form method="get" asp-action="GetEmpleadosFiltro" class="d-flex">
-        <input type="text" name="busqueda" class="form-control me-2"
+    <form method="get" asp-action="GetEmpleadosFiltro" class="d-flex gap-2">
+        <input type="text" name="busqueda" class="form-control"
                placeholder="Buscar por nombre o apellido" />
+
+        <select name="departamentoId" class="form-select">
+            <option value="">Todos los departamentos</option>
+            @foreach (var depto in ViewBag.Departamentos)
+            {
+                if (ViewBag.DepartamentoSeleccionado == depto.IdDepartamento)
+                {
+                    <option value="@depto.IdDepartamento" selected>
+                        @depto.Nombre
+                    </option>
+                }
+                else
+                {
+                    <option value="@depto.IdDepartamento">
+                        @depto.Nombre
+                    </option>
+                }
+            }
+        </select>
+
         <button type="submit" class="btn btn-primary">Buscar</button>
     </form>
 

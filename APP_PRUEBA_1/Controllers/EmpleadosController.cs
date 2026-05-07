@@ -24,6 +24,7 @@ namespace APP_PRUEBA_1.Controllers
         {
             try
             {
+                ViewBag.Departamentos = await _servicioDepartamento.GetDepartamentosAsync(); //para que no se rompa la vista
                 var empleados = await _servicio.GetEmpleadosAsync();
                 return View(empleados);
             }
@@ -57,17 +58,29 @@ namespace APP_PRUEBA_1.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetEmpleadosFiltro(string busqueda) 
+        public async Task<IActionResult> GetEmpleadosFiltro(string? busqueda, int? departamentoId) //se hacen nullables porque pueden no recibir nada si se da enter sin seleccionar algo
         {
-            var resultado = await _servicio.GetEmpleadosByNombreOApellidoAsync(busqueda);
-
-            if (!resultado.IsValid) 
+            try
             {
-                TempData["Errores"] = string.Join("|", resultado.Errors);
+                ViewBag.Departamentos = await _servicioDepartamento.GetDepartamentosAsync(); //Para que no se rompa la vista al inicio
+                var resultado = await _servicio.GetEmpleadosFiltradosAsync(busqueda, departamentoId);
+
+                if (!resultado.IsValid)
+                {
+                    TempData["Errores"] = string.Join("|", resultado.Errors);
+                    return RedirectToAction("GetEmpleados");
+                }
+
+                //Valores que se pasan a la vista para hacer los filtros
+                ViewBag.Busqueda = busqueda;
+                ViewBag.DepartamentoSeleccionado = departamentoId;
+                return View("GetEmpleados", resultado.Value);
+            }
+            catch (Exception ex) 
+            {
+                TempData["Errores"] = ex.Message;
                 return RedirectToAction("GetEmpleados");
             }
-
-            return View("GetEmpleados", resultado.Value);
         }
 
         [HttpGet]
