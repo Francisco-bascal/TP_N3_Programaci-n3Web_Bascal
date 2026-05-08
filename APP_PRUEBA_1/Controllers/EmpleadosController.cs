@@ -123,13 +123,13 @@ namespace APP_PRUEBA_1.Controllers
             {
                 var departamentos = await _servicioDepartamento.GetDepartamentosAsync();
                 var resultado = await _servicio.GetEmpleadoByIdAsync(id);
-                
+
                 if (!resultado.IsValid) //no debería fallar al ser un GetById pero se implementa de todos modos por seguridad
                 {
                     TempData["Errores"] = string.Join("|", resultado.Errors);
+                    ViewBag.Departamentos = new SelectList(departamentos, "IdDepartamento", "Nombre", resultado?.Value?.IdDepartamento); //se vuelven a pasar los Departamentos en caso de que la creación no sea válida
                     return RedirectToAction("GetEmpleados");
                 }
-
                 ViewBag.Departamentos = new SelectList(departamentos, "IdDepartamento", "Nombre", resultado?.Value?.IdDepartamento);
                 return View(resultado?.Value);
             }
@@ -149,7 +149,6 @@ namespace APP_PRUEBA_1.Controllers
                 if (!resultado.IsValid)
                 {
                     TempData["Errores"] = string.Join("|", resultado.Errors);
-
                     var departamentos = await _servicioDepartamento.GetDepartamentosAsync(); //se vuelve a rellenar el viewbag
                     ViewBag.Departamentos = new SelectList(departamentos, "IdDepartamento", "Nombre", empleado.IdDepartamento);
                     
@@ -161,7 +160,6 @@ namespace APP_PRUEBA_1.Controllers
             catch (Exception ex)
             {
                 TempData["Errores"] = ex.Message;
-
                 var departamentos = await _servicioDepartamento.GetDepartamentosAsync();
                 ViewBag.Departamentos = new SelectList(departamentos, "IdDepartamento", "Nombre", empleado.IdDepartamento);
                 

@@ -14,6 +14,7 @@ public partial class Empleado
     public int IdEmpleado { get; set; }
 
     [Column("DNI")]
+    [Range(1, 70000000, ErrorMessage = "El valor del DNI debe estar entre 1 y 70.000.000")]
     public int Dni { get; set; }
     [Required]
     public bool Estado { get; set; }

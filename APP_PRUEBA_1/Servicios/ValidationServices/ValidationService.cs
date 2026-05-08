@@ -47,12 +47,6 @@ namespace APP_PRUEBA_1.Servicios.Validation
             if (empleado.CantidadHijos < 0)
                 errores.Add("El empleado no puede tener una cantidad de hijos negativa");
 
-            if (empleado.Dni < 0)
-                errores.Add("El DNI del empleado no puede ser menor a 0");
-
-            if (empleado.Dni > 70000000)
-                errores.Add("El DNI del empleado no puede ser superior a 70.000.000");
-
             if (!esValido) errores = AppendValidationErrores(errores, resultado).ToList(); //junta todos los errores de validación
 
             return errores;

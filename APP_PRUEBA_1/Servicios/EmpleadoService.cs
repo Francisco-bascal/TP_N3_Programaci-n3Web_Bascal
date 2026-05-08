@@ -50,6 +50,10 @@ namespace APP_PRUEBA_1.Servicios
             var resValEmpleado = ValidationService.Validar<Empleado>(empleado, ValidationService.ValidarModeloEmpleado);
             if (!resValEmpleado.IsValid) return resValEmpleado;
 
+            var empleados = await _repositorio.GetEmpleadosAsync();
+            if (empleados.Any(e => e.Dni.Equals(empleado.Dni) && !e.IdEmpleado.Equals(empleado.IdEmpleado))) //para que no se detecte a sí mismo como duplicado
+                return Result<Empleado>.Failure($"Ya existe un empleado con el DNI: {empleado.Dni}");
+
             var existe = await _repositorio.GetEmpleadoByIdAsync(empleado.IdEmpleado);
             if (existe == null) return Result<Empleado>.Failure($"No existe el empleado con el id {empleado.IdEmpleado}");
 
@@ -76,7 +80,11 @@ namespace APP_PRUEBA_1.Servicios
         public async Task<Result<Empleado>> PostEmpleadoAsync(Empleado empleado) 
         {
             var resValEmpleado = ValidationService.Validar<Empleado>(empleado, ValidationService.ValidarModeloEmpleadoPost); //No se puede usar el de validación de modelo normal, porque salta la validación del id, dado que el mismo se asigna al llegar a la base de datos no antes
-            if (!resValEmpleado.IsValid) return resValEmpleado; //Caso Failure
+            if (!resValEmpleado.IsValid) return resValEmpleado;
+
+            var empleados = await _repositorio.GetEmpleadosAsync();
+            if (empleados.Any(e => e.Dni.Equals(empleado.Dni)))
+                return Result<Empleado>.Failure($"Ya existe un empleado con el DNI: {empleado.Dni}");
 
             await _repositorio.PostEmpleadoAsync(empleado);
             return Result<Empleado>.Success(empleado);
