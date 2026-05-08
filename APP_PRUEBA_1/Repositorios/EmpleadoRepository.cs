@@ -29,7 +29,19 @@ namespace APP_PRUEBA_1.Repositorios
             await _contexto.Empleados.AddAsync(empleado);
             await _contexto.SaveChangesAsync();
         }
+        //Repo para Filtro de Búsqueda ↨
+        public async Task<ICollection<Empleado>> GetEmpleadosFiltradosAsync(string? busqueda, int? departamentoId)
+        {
+            IQueryable<Empleado> query = _contexto.Empleados;
+            if (!string.IsNullOrWhiteSpace(busqueda)) 
+                query = query.Where(e => e.Nombre.ToLower().Contains(busqueda.ToLower()) || e.Apellido.Contains(busqueda.ToLower()));
 
+            if (departamentoId.HasValue)
+                query = query.Where(e => e.IdDepartamento.Equals(departamentoId.Value));
+
+            return await query.ToListAsync();
+        }
+        //Repo para Filtro de Búsqueda ↨
         public async Task PutEmpleadoAsync(Empleado empleado)
         {
             var existe = await _contexto.Empleados.FindAsync(empleado.IdEmpleado);
@@ -115,14 +127,3 @@ public async Task UpdateEmpleadoAsync(Empleados empleado)
     await _contexto.SaveChangesAsync();
 }
 */
-
-/*
- Decidí eliminar la lógica de filtrado del repositorio de empleado, centralizandola en el servicio:
-        //Repo para Filtro de Búsqueda ↨
-        public async Task<ICollection<Empleado>> GetEmpleadosByNameOrLastNameAsync(string busqueda) 
-        {
-            var empleados = await _contexto.Empleados.Where(e => e.Nombre.Contains(busqueda, StringComparison.OrdinalIgnoreCase) || e.Apellido.Contains(busqueda, StringComparison.OrdinalIgnoreCase)).ToListAsync();
-            return empleados;
-        }
-        //Repo para Filtro de Búsqueda ↨
- */

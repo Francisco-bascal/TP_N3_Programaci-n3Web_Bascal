@@ -29,7 +29,7 @@
 
     <form method="get" asp-action="GetEmpleadosFiltro" class="d-flex gap-2">
         <input type="text" name="busqueda" class="form-control"
-               placeholder="Buscar por nombre o apellido" />
+               placeholder="Buscar por nombre o apellido" value="@ViewBag.Busqueda" />
 
         <select name="departamentoId" class="form-select">
             <option value="">Todos los departamentos</option>

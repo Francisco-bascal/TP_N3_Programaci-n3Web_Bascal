@@ -33,14 +33,7 @@ namespace APP_PRUEBA_1.Servicios
         //Servicio para filtro de búsqueda ↨
         public async Task<Result<ICollection<Empleado>>> GetEmpleadosFiltradosAsync(string? busqueda, int? departamentoId) 
         {
-            var empleados = await _repositorio.GetEmpleadosAsync();
-
-            if (!string.IsNullOrWhiteSpace(busqueda))
-                empleados = empleados.Where(e => e.Nombre.Contains(busqueda, StringComparison.OrdinalIgnoreCase) || e.Apellido.Contains(busqueda, StringComparison.OrdinalIgnoreCase)).ToList();
-
-            if (departamentoId.HasValue) 
-                empleados = empleados.Where(e => e.IdDepartamento.Equals(departamentoId.Value)).ToList();
-
+            var empleados = await _repositorio.GetEmpleadosFiltradosAsync(busqueda, departamentoId);
             return Result<ICollection<Empleado>>.Success(empleados);
         }
         //Servicio para filtro de búsqueda ↨
