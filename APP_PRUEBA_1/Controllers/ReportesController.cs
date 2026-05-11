@@ -1,4 +1,6 @@
-﻿using APP_PRUEBA_1.Models.ViewModels;
+﻿using APP_PRUEBA_1.Models;
+using APP_PRUEBA_1.Models.DTOs;
+using APP_PRUEBA_1.Models.ViewModels;
 using APP_PRUEBA_1.Servicios;
 using APP_PRUEBA_1.Servicios.Validation;
 using Microsoft.AspNetCore.Http;
@@ -51,6 +53,36 @@ namespace APP_PRUEBA_1.Controllers
                     return RedirectToAction("Reportes");
                 }
                 return View(resultado.Value);
+            }
+            catch (Exception ex) 
+            {
+                TempData["Errores"] = ex.Message;
+                return RedirectToAction("Reportes");
+            }
+        }
+
+        public async Task<IActionResult> ReporteFiltroEspecializado(FiltroEmpleadoDTO filtros) 
+        {
+            Result<IEnumerable<Empleado>> resultado;
+            Result<IEnumerable<Departamento>> departamentos; //nunca lanza Failure, si puede detonar excepción
+            try
+            {
+                resultado = await _servicio.GetEmpleadosReporteFiltros(filtros);
+                departamentos = await _servicio.GetDepartamentosAsync();
+                if (!resultado.IsValid) 
+                {
+                    TempData["Errores"] = string.Join("|", resultado.Errors);
+                    return RedirectToAction("ReporteFiltroEspecializado");
+                }
+
+                var retornoEmpleados = new ReporteConFiltrosEmpleadoVM
+                {
+                    Filtros = filtros,
+                    Empleados = resultado.Value,
+                    Departamentos = departamentos.Value
+                };
+
+                return View(retornoEmpleados);
             }
             catch (Exception ex) 
             {

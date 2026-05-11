@@ -2,15 +2,18 @@
 using APP_PRUEBA_1.Servicios.Validation;
 using APP_PRUEBA_1.Models.ViewModels;
 using APP_PRUEBA_1.Models;
+using APP_PRUEBA_1.Models.DTOs;
 
 namespace APP_PRUEBA_1.Servicios
 {
     public class ReporteService : IReporteService
     {
         private readonly IEmpleadoRepository _repo;
-        public ReporteService(IEmpleadoRepository repo)
+        private readonly IDepartamentoRepository _repoDepartamento;
+        public ReporteService(IEmpleadoRepository repo, IDepartamentoRepository repoDepartamento)
         {
             _repo = repo;
+            _repoDepartamento = repoDepartamento;
         }
 
         public async Task<Result<IEnumerable<EmpleadosPorDepartamentoVM>>> GetEmpleadosPorDepartamentoAsync() 
@@ -36,6 +39,66 @@ namespace APP_PRUEBA_1.Servicios
             .OrderBy(g => g.NombreDepartamento).ToList();
 
             return Result<IEnumerable<EmpleadosAgrupadosPorDepartamentoVM>>.Success(empleadosRetornar);
+        }
+
+        public async Task<Result<IEnumerable<Empleado>>> GetEmpleadosReporteFiltros(FiltroEmpleadoDTO filtro) 
+        {
+            if (!string.IsNullOrWhiteSpace(filtro.Busqueda)) 
+            {
+                if (filtro.Busqueda.Trim().Length <= 2) 
+                    return Result<IEnumerable<Empleado>>.Failure("El filtro de búsqueda debe contener al menos 3 caracteres");
+            }
+
+            if (filtro.FechaIngresoHasta.HasValue) 
+            {
+                if (filtro.FechaIngresoHasta.Value > DateOnly.FromDateTime(DateTime.Now))
+                    return Result<IEnumerable<Empleado>>.Failure("La fecha de filtrado \"Hasta\" no puede ser superior a la fecha actual");
+            }
+
+            if (filtro.FechaIngresoDesde.HasValue)
+            {
+                if (filtro.FechaIngresoDesde.Value > DateOnly.FromDateTime(DateTime.Now))
+                    return Result<IEnumerable<Empleado>>.Failure("La fecha de filtrado \"Desde\" no puede ser superior a la fecha actual");
+            }
+
+            if (filtro.IdDepartamento.HasValue) 
+            {
+                if (filtro.IdDepartamento.Value <= 0) 
+                    return Result<IEnumerable<Empleado>>.Failure("El id del departamento no puede ser menor que 1");
+            }
+
+            if (filtro.CantidadHijosMax.HasValue) 
+            {
+                if (filtro.CantidadHijosMax.Value < 0) 
+                    return Result<IEnumerable<Empleado>>.Failure("La cantidad máxima de hijos no puede ser menor que 0"); 
+            }
+
+            if (filtro.CantidadHijosMin.HasValue) 
+            {
+                if (filtro.CantidadHijosMin.Value < 0) 
+                    return Result<IEnumerable<Empleado>>.Failure("La cantidad mínima de hijos no puede ser menor que 0");
+            }
+
+            if (filtro.CantidadHijosMin.HasValue && filtro.CantidadHijosMax.HasValue) 
+            {
+                if (filtro.CantidadHijosMax.Value < filtro.CantidadHijosMin.Value) 
+                    return Result<IEnumerable<Empleado>>.Failure("El filtro de límite superior de hijos no puede ser inferior al filtro de límite inferior de hijos");
+            }
+
+            if (filtro.FechaIngresoDesde.HasValue && filtro.FechaIngresoHasta.HasValue) 
+            {
+                if (filtro.FechaIngresoHasta.Value < filtro.FechaIngresoDesde.Value) 
+                    return Result<IEnumerable<Empleado>>.Failure("La fecha de filtrado \"hasta\" no puede ser menor que la \"desde\"");
+            }
+
+            var empleados = await _repo.GetEmpleadosConFiltroReportes(filtro);
+            return Result<IEnumerable<Empleado>>.Success(empleados);
+        }
+
+        public async Task<Result<IEnumerable<Departamento>>> GetDepartamentosAsync() 
+        {
+            var departamentos = await _repoDepartamento.GetDepartamentosAsync();
+            return Result<IEnumerable<Departamento>>.Success(departamentos);
         }
     }
 }

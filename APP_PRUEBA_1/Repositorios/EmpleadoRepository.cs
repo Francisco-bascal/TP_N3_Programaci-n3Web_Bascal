@@ -1,4 +1,5 @@
 ﻿using APP_PRUEBA_1.Models;
+using APP_PRUEBA_1.Models.DTOs;
 using Microsoft.EntityFrameworkCore;
 
 namespace APP_PRUEBA_1.Repositorios
@@ -71,6 +72,48 @@ namespace APP_PRUEBA_1.Repositorios
             _contexto.Empleados.Remove(empleado);
 
             await _contexto.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<Empleado>> GetEmpleadosConFiltroReportes(FiltroEmpleadoDTO filtros) 
+        {
+            var query = _contexto.Empleados.AsNoTracking().Include(e => e.IdDepartamentoNavigation).AsQueryable();
+
+            if (filtros.IdDepartamento.HasValue) 
+            {
+                query = query.Where(e => e.IdDepartamento.Equals(filtros.IdDepartamento.Value));
+            }
+
+            if (!string.IsNullOrWhiteSpace(filtros.Busqueda)) 
+            {
+                query = query.Where(e => e.Nombre.ToLower().Contains(filtros.Busqueda.ToLower().Trim()) || e.Apellido.ToLower().Contains(filtros.Busqueda.ToLower().Trim()));
+            }
+
+            if (filtros.Estado.HasValue) 
+            {
+                query = query.Where(e => e.Estado.Equals(filtros.Estado.Value));
+            }
+
+            if (filtros.CantidadHijosMin.HasValue) 
+            {
+                query = query.Where(e => e.CantidadHijos >= filtros.CantidadHijosMin.Value);
+            }
+
+            if (filtros.CantidadHijosMax.HasValue)
+            {
+                query = query.Where(e => e.CantidadHijos <= filtros.CantidadHijosMax.Value);
+            }
+
+            if (filtros.FechaIngresoDesde.HasValue) 
+            {
+                query = query.Where(e => e.FechaIngreso >= filtros.FechaIngresoDesde.Value);
+            }
+
+            if (filtros.FechaIngresoHasta.HasValue)
+            {
+                query = query.Where(e => e.FechaIngreso <= filtros.FechaIngresoHasta.Value);
+            }
+
+            return await query.OrderBy(e => e.Apellido).ThenBy(e => e.Nombre).ToListAsync();
         }
     }
 }
