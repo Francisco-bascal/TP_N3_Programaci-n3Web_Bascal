@@ -15,7 +15,15 @@
    "T4TemplatePath": null,
    "Tables": [
       {
+         "Name": "[dbo].[Cursos]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[Departamentos]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[EmpleadoCurso]",
          "ObjectType": 0
       },
       {

@@ -64,7 +64,7 @@ namespace APP_PRUEBA_1.Servicios
 
             if (existe.Estado.Equals(true)) return Result<Empleado>.Failure("No se puede eliminar un empleado con estado activo");
 
-            if (existe.FechaIngreso < DateOnly.FromDateTime(DateTime.Now).AddYears(-5)) return Result<Empleado>.Failure("No se puede eliminar un empleado con más de 5 años de antigüedad");
+            if (existe.FechaIngreso < (DateOnly.FromDateTime(DateTime.Now).AddYears(-5))) return Result<Empleado>.Failure("No se puede eliminar un empleado con más de 5 años de antigüedad");
 
             await _repositorio.DeleteEmpleadoByIdAsync(id);
             return Result<Empleado>.Success(existe);
