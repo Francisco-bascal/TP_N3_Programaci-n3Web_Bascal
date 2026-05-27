@@ -1,0 +1,88 @@
+﻿@model IEnumerable<APP_PRUEBA_1.Models.Curso>
+
+@if (TempData["Errores"] != null)
+{
+    var errores = TempData["Errores"].ToString().Split("|");
+
+    <div class="alert alert-danger">
+        <ul>
+            @foreach (var error in errores)
+            {
+                <li>@error</li>
+            }
+        </ul>
+    </div>
+}
+
+@if (TempData["Exito"] is string exito)
+{
+    <div class="alert alert-success">
+        <ul>
+            @exito
+        </ul>
+    </div>
+}
+
+<h1 class="text-center mb-3">Cursos</h1>
+
+<div class="d-flex justify-content-end align-items-center mb-3">
+
+    <a asp-action="Create" class="btn btn-primary">
+        Nuevo Curso
+    </a>
+</div>
+
+<table class="table table-bordered table-striped table-hover">
+    <thead class="table-dark text-light">
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Horas</th>
+            <th>Fecha Inicio</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var curso in Model)
+        {
+            <tr>
+                <td>@curso.IdCurso</td>
+                <td>@curso.NombreCurso</td>
+                <td>@curso.Horas</td>
+                <td>@curso.FechaInicio</td>
+
+                <td>
+                    <a asp-action="Edit"
+                       asp-route-id="@curso.IdCurso"
+                       class="btn btn-warning btn-sm">
+                        Editar
+                    </a>
+
+                    <form asp-action="Delete"
+                          method="post"
+                          style="display:inline;">
+
+                        <input type="hidden"
+                               name="id"
+                               value="@curso.IdCurso" />
+
+                        <button type="submit"
+                                class="btn btn-danger btn-sm"
+                                onclick="return confirm('¿Eliminar curso?');">
+
+                            Eliminar
+                        </button>
+                    </form>
+
+                    <a asp-action="GetCursoById"
+                       asp-route-id="@curso.IdCurso"
+                       class="btn btn-primary btn-sm">
+
+                        Detalles
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
