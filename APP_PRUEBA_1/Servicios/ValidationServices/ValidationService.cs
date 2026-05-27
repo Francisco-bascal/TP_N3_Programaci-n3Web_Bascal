@@ -93,6 +93,27 @@ namespace APP_PRUEBA_1.Servicios.Validation
             return errores;
         }
 
+        public static IEnumerable<string> ValidarModeloCurso(Curso curso) 
+        {
+            var errores = new List<string>();
+
+            var resultado = new List<ValidationResult>();
+            var context = new ValidationContext(curso);
+            bool esValido = Validator.TryValidateObject(curso, context, resultado, true);
+
+            if (curso.Horas <= 0) errores.Add("La cantidad de horas del curso no puede ser igual o menor que 0");
+
+            if (curso.Horas > 500) errores.Add("La cantidad de horas del curso no puede ser superior a 500");
+
+            if (curso.FechaInicio > DateOnly.FromDateTime(DateTime.Now)) errores.Add("La fecha de inicio no puede ser posterior a la fecha actual");
+
+            if (curso.FechaInicio < DateOnly.FromDateTime(DateTime.Now).AddYears(-3)) errores.Add("Ningún curso dura más de 3 años");
+
+            if (!esValido) errores = AppendValidationErrores(errores, resultado).ToList();
+
+            return errores;
+        }
+
         public static IEnumerable<string> AppendValidationErrores(List<string> erroresResultFuente, List<ValidationResult> erroresDataFuente) 
         {
             var erroresData = erroresDataFuente.Where(r => r.ErrorMessage != null).Select(r => r.ErrorMessage ?? "Error de validación").ToList(); //Extraemos los errores de data anotations
