@@ -13,10 +13,12 @@ namespace APP_PRUEBA_1.Controllers
     {
         private readonly IEmpleadoService _servicio;
         private readonly IDepartamentoService _servicioDepartamento;
-        public EmpleadosController(IEmpleadoService servicio, IDepartamentoService servicioDepartamento)
+        private readonly ICursoService _servicioCurso;
+        public EmpleadosController(IEmpleadoService servicio, IDepartamentoService servicioDepartamento, ICursoService servicioCurso)
         {
             _servicio = servicio;
             _servicioDepartamento = servicioDepartamento;
+            _servicioCurso = servicioCurso;
         }
 
         [HttpGet]
@@ -130,6 +132,7 @@ namespace APP_PRUEBA_1.Controllers
                     ViewBag.Departamentos = new SelectList(departamentos, "IdDepartamento", "Nombre", resultado?.Value?.IdDepartamento); //se vuelven a pasar los Departamentos en caso de que la creación no sea válida
                     return RedirectToAction("GetEmpleados");
                 }
+                ViewBag.Cursos = await _servicioCurso.GetCursosAsync();
                 ViewBag.Departamentos = new SelectList(departamentos, "IdDepartamento", "Nombre", resultado?.Value?.IdDepartamento);
                 return View(resultado?.Value);
             }
@@ -141,17 +144,21 @@ namespace APP_PRUEBA_1.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditAsync(Empleado empleado)
+        public async Task<IActionResult> EditAsync(Empleado empleado, List<int> CursosSeleccionados)
         {
             try
             {
+                empleado.IdCursos = (CursosSeleccionados ?? new List<int>()) //si no se marca ningún checkbox se envía al repo limpiar la propiedad Muchos a Muchos. Sino se le envían los cursos a los que está asignado
+                    .Select(id => new Curso { IdCurso = id }).ToList();
+
                 var resultado = await _servicio.PutEmpleadoAsync(empleado);
                 if (!resultado.IsValid)
                 {
                     TempData["Errores"] = string.Join("|", resultado.Errors);
                     var departamentos = await _servicioDepartamento.GetDepartamentosAsync(); //se vuelve a rellenar el viewbag
                     ViewBag.Departamentos = new SelectList(departamentos, "IdDepartamento", "Nombre", empleado.IdDepartamento);
-                    
+                    ViewBag.Cursos = await _servicioCurso.GetCursosAsync();
+
                     return View(empleado);
                 }
                 TempData["Exito"] = "Empleado editado exitosamente";
@@ -162,7 +169,7 @@ namespace APP_PRUEBA_1.Controllers
                 TempData["Errores"] = ex.Message;
                 var departamentos = await _servicioDepartamento.GetDepartamentosAsync();
                 ViewBag.Departamentos = new SelectList(departamentos, "IdDepartamento", "Nombre", empleado.IdDepartamento);
-                
+                ViewBag.Cursos = await _servicioCurso.GetCursosAsync();
                 return View(empleado);
             }
         }

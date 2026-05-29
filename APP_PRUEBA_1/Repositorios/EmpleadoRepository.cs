@@ -15,14 +15,14 @@ namespace APP_PRUEBA_1.Repositorios
             _contexto = contexto;
         }
 
-        public async Task<ICollection<Empleado>> GetEmpleadosAsync() 
+        public async Task<ICollection<Empleado>> GetEmpleadosAsync()
         {
-            return await _contexto.Empleados.Include(e => e.IdDepartamentoNavigation).ToListAsync(); //Include para mostrar el nombre del departamento
+            return await _contexto.Empleados.Include(e => e.IdDepartamentoNavigation).Include(e => e.IdCursos).ToListAsync(); //Include para mostrar el nombre del departamento
         }
 
         public async Task<Empleado?> GetEmpleadoByIdAsync(int id) 
         {
-            var empleado = await _contexto.Empleados.Include(e => e.IdDepartamentoNavigation).FirstOrDefaultAsync(e => e.IdEmpleado.Equals(id));
+            var empleado = await _contexto.Empleados.Include(e => e.IdDepartamentoNavigation).Include(e => e.IdCursos).FirstOrDefaultAsync(e => e.IdEmpleado.Equals(id));
             return empleado;
         }
         public async Task PostEmpleadoAsync(Empleado empleado) 
@@ -45,7 +45,7 @@ namespace APP_PRUEBA_1.Repositorios
         //Repo para Filtro de Búsqueda ↨
         public async Task PutEmpleadoAsync(Empleado empleado)
         {
-            var existe = await _contexto.Empleados.FindAsync(empleado.IdEmpleado);
+            var existe = await _contexto.Empleados.Include(e => e.IdCursos).FirstOrDefaultAsync(e => e.IdEmpleado.Equals(empleado.IdEmpleado));
 
             existe.Nombre = empleado.Nombre;
             existe.Apellido = empleado.Apellido;
@@ -54,6 +54,18 @@ namespace APP_PRUEBA_1.Repositorios
             existe.FechaIngreso = empleado.FechaIngreso;
             existe.CantidadHijos = empleado.CantidadHijos;
             existe.IdDepartamento = empleado.IdDepartamento;
+
+            existe.IdCursos.Clear();
+
+            foreach (var curso in empleado.IdCursos)
+            {
+                var cursoExistente = await _contexto.Cursos.FindAsync(curso.IdCurso);
+
+                if (cursoExistente != null)
+                {
+                    existe.IdCursos.Add(cursoExistente);
+                }
+            }
 
             await _contexto.SaveChangesAsync();
         }
