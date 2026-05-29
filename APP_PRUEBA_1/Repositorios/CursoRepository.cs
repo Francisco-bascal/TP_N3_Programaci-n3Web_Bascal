@@ -20,6 +20,16 @@ namespace APP_PRUEBA_1.Repositorios
             return await _contexto.Cursos.Include(c => c.IdEmpleados).FirstOrDefaultAsync(c => c.IdCurso.Equals(id));
         }
 
+        public async Task<IEnumerable<Curso>> GetCursosByNameAsync(string? busqueda) 
+        {
+            IQueryable<Curso> query = _contexto.Cursos;
+
+            if (!String.IsNullOrWhiteSpace(busqueda)) 
+                query = query.Where(c => c.NombreCurso.Contains(busqueda));
+
+            return await query.ToListAsync();
+        }
+
         public async Task PostCursoAsync(Curso curso) 
         {
             await _contexto.Cursos.AddAsync(curso);

@@ -25,11 +25,13 @@
 
 <h1 class="text-center mb-3">Cursos</h1>
 
-<div class="d-flex justify-content-end align-items-center mb-3">
-
-    <a asp-action="Create" class="btn btn-primary">
-        Nuevo Curso
-    </a>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <form method="get" asp-action="GetCursosByName" class="d-flex">
+        <input type="text" name="busqueda" class="form-control me-2"
+               placeholder="Buscar por nombre" />
+        <button type="submit" class="btn btn-primary">Buscar</button>
+    </form>
+    <a asp-action="Create" class="btn btn-primary">Nuevo Curso</a>
 </div>
 
 <table class="table table-bordered table-striped table-hover">

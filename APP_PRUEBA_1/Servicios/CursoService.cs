@@ -28,6 +28,13 @@ namespace APP_PRUEBA_1.Servicios
             return Result<Curso>.Success(existe);
         }
 
+        public async Task<Result<IEnumerable<Curso>>> GetCursosByNameAsync(string? busqueda) 
+        {
+            var existe = await _repositorio.GetCursosByNameAsync(busqueda);
+            //if (existe == null) return Result<ICollection<Curso>>.Failure("Ningún curso cumple con el criterio de búsqueda");
+            return Result<IEnumerable<Curso>>.Success(existe);
+        }
+
         public async Task<Result<Curso>> PostCursoAsync(Curso curso) 
         {
             var resultado = ValidationService.Validar<Curso>(curso, ValidationService.ValidarModeloCurso);

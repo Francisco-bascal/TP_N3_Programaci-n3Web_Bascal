@@ -44,6 +44,20 @@ namespace APP_PRUEBA_1.Controllers
                 return RedirectToAction("GetCursos");
             }
         }
+        [HttpGet]
+        public async Task<IActionResult> GetCursosByNameAsync(string? busqueda)
+        {
+            try
+            {
+                var resultado = await _servicio.GetCursosByNameAsync(busqueda);
+                return View("GetCursos", resultado.Value);
+            }
+            catch (Exception ex)
+            {
+                TempData["Errores"] = ex.Message;
+                return RedirectToAction("GetCursos");
+            }
+        }
         //
         [HttpGet]
         public IActionResult Create()

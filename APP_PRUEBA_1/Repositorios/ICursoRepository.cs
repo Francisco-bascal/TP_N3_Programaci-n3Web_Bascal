@@ -6,6 +6,7 @@ namespace APP_PRUEBA_1.Repositorios
     {
         Task<ICollection<Curso>> GetCursosAsync();
         Task<Curso> GetCursoByIdAsync(int id);
+        Task<IEnumerable<Curso>> GetCursosByNameAsync(string? busqueda);
         Task PostCursoAsync(Curso curso);
         Task PutCursoAsync(Curso curso);
         Task DeleteCursoByIdAsync(int id);
