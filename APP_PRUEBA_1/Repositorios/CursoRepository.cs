@@ -13,7 +13,7 @@ namespace APP_PRUEBA_1.Repositorios
 
         public async Task<ICollection<Curso>> GetCursosAsync() 
         {
-            return await _contexto.Cursos.ToListAsync();
+            return await _contexto.Cursos.Include(c => c.IdEmpleados).ToListAsync();
         }
         public async Task<Curso> GetCursoByIdAsync(int id) 
         {

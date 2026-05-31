@@ -90,5 +90,31 @@ namespace APP_PRUEBA_1.Controllers
                 return RedirectToAction("Reportes");
             }
         }
+
+        public async Task<IActionResult> ReporteEmpleadosPorCurso(int? idCurso) 
+        {
+            Result<EmpleadosPorCursoVM> resultado;
+            try
+            {
+                ViewBag.Cursos = (await _servicio.GetCursosAsync()).Value;
+
+                if (!idCurso.HasValue)
+                    return View();
+
+                resultado = await _servicio.GetEmpleadosPorCursoAsync(idCurso.Value);
+                if (!resultado.IsValid) 
+                {
+                    TempData["Errores"] = string.Join("|", resultado.Errors);
+                    return RedirectToAction("Reportes"); 
+                }
+
+                return View(resultado.Value);
+            }
+            catch (Exception ex) 
+            {
+                TempData["Errores"] = ex.Message;
+                return RedirectToAction("Reportes");
+            }
+        }
     }
 }

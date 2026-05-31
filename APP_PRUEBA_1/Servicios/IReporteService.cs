@@ -11,5 +11,7 @@ namespace APP_PRUEBA_1.Servicios
         Task<Result<IEnumerable<EmpleadosAgrupadosPorDepartamentoVM>>> GetEmpleadosAgrupadosPorDepartamentoAsync();
         Task<Result<IEnumerable<Empleado>>> GetEmpleadosReporteFiltros(FiltroEmpleadoDTO filtro);
         Task<Result<IEnumerable<Departamento>>> GetDepartamentosAsync();
+        Task<Result<EmpleadosPorCursoVM>> GetEmpleadosPorCursoAsync(int idCurso);
+        Task<Result<IEnumerable<Curso>>> GetCursosAsync();
     }
 }

@@ -1,0 +1,92 @@
+﻿@model APP_PRUEBA_1.Models.ViewModels.EmpleadosPorCursoVM
+
+@if (TempData["Errores"] != null)
+{
+    var errores = TempData["Errores"].ToString().Split("|");
+        <div class="alert alert-danger">
+            <ul>
+                @foreach (var error in errores)
+                {
+                    <li>@error</li>
+                }
+            </ul>
+        </div>
+}
+
+    <h2 class="text-center mb-3">Empleados por Curso</h2>
+
+    <form method="get" asp-action="ReporteEmpleadosPorCurso">
+
+        <div class="row mb-3">
+
+            <div class="col-md-6">
+
+                <select name="idCurso" class="form-control">
+
+                    <option value="">
+                        -- Seleccionar curso --
+                    </option>
+
+                    @foreach (var curso in ViewBag.Cursos)
+                    {
+                        <option value="@curso.IdCurso">
+                            @curso.NombreCurso
+                        </option>
+                    }
+
+                </select>
+
+            </div>
+
+            <div class="col-md-2">
+
+                <button type="submit"
+                        class="btn btn-primary">
+                    Buscar
+                </button>
+
+            </div>
+
+        </div>
+
+    </form>
+
+@if (Model != null)
+{
+        <h4 class="mb-3">
+            Curso: @Model.NombreCurso
+        </h4>
+
+        <table class="table table-bordered table-striped">
+
+            <thead class="table-dark">
+
+                <tr>
+                    <th>ID</th>
+                    <th>DNI</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Estado</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                @foreach (var emp in Model.Empleados)
+                {
+                    <tr>
+                        <td>@emp.IdEmpleado</td>
+                        <td>@emp.Dni</td>
+                        <td>@emp.Nombre</td>
+                        <td>@emp.Apellido</td>
+                        <td>
+                            @(emp.Estado ? "Activo" : "Inactivo")
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+}
