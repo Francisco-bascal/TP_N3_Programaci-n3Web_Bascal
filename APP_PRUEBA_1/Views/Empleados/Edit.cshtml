@@ -68,20 +68,24 @@
             </select>
         </div>
 
-        @foreach (var curso in ViewBag.Cursos)
-        {
-            <div class="form-check">
-                <input class="form-check-input"
-                       type="checkbox"
-                       name="CursosSeleccionados"
-                       value="@curso.IdCurso"
-                       checked="@Model.IdCursos.Any(c => c.IdCurso == curso.IdCurso)" />
-
-                <label class="form-check-label">
-                    @curso.NombreCurso
-                </label>
+        <div class="mt-4">
+            <h5>Cursos asignados</h5>
+            <div class="border rounded p-3">
+                @foreach (var curso in ViewBag.Cursos)
+                {
+                    <div class="form-check">
+                        <input class="form-check-input"
+                               type="checkbox"
+                               name="CursosSeleccionados"
+                               value="@curso.IdCurso"
+                               checked="@Model.IdCursos.Any(c => c.IdCurso == curso.IdCurso)" />
+                        <label class="form-check-label">
+                            @curso.NombreCurso
+                        </label>
+                    </div>
+                }
             </div>
-        }
+        </div>
 
         <div asp-validation-summary="All" class="text-danger"></div>
 

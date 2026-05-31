@@ -37,6 +37,26 @@
                 <small class="text-muted">Departamento</small>
                 <div class="fs-5 fw-bold">@Model.IdDepartamentoNavigation.Nombre</div>
             </div>
+            <div class="mt-3">
+                <small class="text-muted">Cursos asignados</small>
+                <div class="border rounded p-3 mt-1">
+                    @if (Model.IdCursos.Any())
+                    {
+                        @foreach (var curso in Model.IdCursos)
+                        {
+                            <div>
+                                • @curso.NombreCurso
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="text-muted">
+                            Sin cursos asignados
+                        </div>
+                    }
+                </div>
+            </div>
         </div>
     </div>
 </div>
