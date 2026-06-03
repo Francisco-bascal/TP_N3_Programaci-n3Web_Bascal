@@ -61,6 +61,8 @@ namespace APP_PRUEBA_1.Servicios
             var existe = await _repositorio.GetUsuarioByIdAsync(id);
             if (existe == null) return Result<Usuario>.Failure($"No existe el usuario con el id {id}");
 
+            if (existe.IdUsuario.Equals(1)) return Result<Usuario>.Failure("Usuario Protegido: No se puede eliminar al administrador general del sistema");
+
             await _repositorio.DeleteUsuarioByIdAsync(id);
             return Result<Usuario>.Success(existe);
         }

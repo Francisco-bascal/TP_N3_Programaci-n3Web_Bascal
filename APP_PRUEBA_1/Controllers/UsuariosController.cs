@@ -101,7 +101,7 @@ namespace APP_PRUEBA_1.Controllers
                     TempData["Errores"] = string.Join("|", resultado.Errors);
                     return RedirectToAction("GetUsuarios");
                 }
-                return View(resultado.Value);
+                return View("Edit", resultado.Value);
             }
             catch (Exception ex) 
             {
