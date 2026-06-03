@@ -15,6 +15,7 @@ public partial class RRHH2026_Db_Context : DbContext
     public virtual DbSet<Curso> Cursos { get; set; }
     public virtual DbSet<Departamento> Departamentos { get; set; }
     public virtual DbSet<Empleado> Empleados { get; set; }
+    public virtual DbSet<Usuario> Usuarios { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Curso>(entity =>
@@ -53,6 +54,12 @@ public partial class RRHH2026_Db_Context : DbContext
             entity.HasOne(d => d.IdDepartamentoNavigation).WithMany(p => p.Empleados)
                 .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName("FK_IdDepartamento");
+        });
+
+        modelBuilder.Entity<Usuario>(entity => 
+        {
+            entity.HasKey(e => e.IdUsuario);
+            entity.Property(e => e.IdUsuario).IsRequired();
         });
 
         OnModelCreatingPartial(modelBuilder);
