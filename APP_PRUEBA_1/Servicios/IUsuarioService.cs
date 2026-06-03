@@ -8,6 +8,7 @@ namespace APP_PRUEBA_1.Servicios
         Task<ICollection<Usuario>> GetUsuariosAsync();
         Task<Result<Usuario>> GetUsuarioByIdAsync(int id);
         Task<Result<Usuario>> GetUsuarioByCredencialesAsync(string nombreUsuario, string contraseña);
+        Task<Result<ICollection<Usuario>>> GetUsuarioByNameOrLastNameAsync(string? busqueda);
         Task<Result<Usuario>> PostUsuarioAsync(Usuario usuario);
         Task<Result<Usuario>> PutUsuarioAsync(Usuario usuario);
         Task<Result<Usuario>> DeleteUsuarioByIdAsync(int id);

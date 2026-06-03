@@ -31,6 +31,11 @@ namespace APP_PRUEBA_1.Servicios
 
             return Result<Usuario>.Success(existe);
         }
+        public async Task<Result<ICollection<Usuario>>> GetUsuarioByNameOrLastNameAsync(string? busqueda) 
+        {
+            var usuarios = await _repositorio.GetUsuarioByNameOrLastNameAsync(busqueda);
+            return Result<ICollection<Usuario>>.Success(usuarios);
+        }
         public async Task<Result<Usuario>> PostUsuarioAsync(Usuario usuario) 
         {
             var existe = await _repositorio.GetUsuarioByCredencialesAsync(usuario.Nombre, usuario.Pass);

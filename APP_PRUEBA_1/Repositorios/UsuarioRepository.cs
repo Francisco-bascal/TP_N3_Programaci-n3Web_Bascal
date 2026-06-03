@@ -26,6 +26,15 @@ namespace APP_PRUEBA_1.Repositorios
         {
             return await _contexto.Usuarios.FirstOrDefaultAsync(u => u.Nombre.Equals(nombre));
         }
+        public async Task<ICollection<Usuario>> GetUsuarioByNameOrLastNameAsync(string? busqueda) 
+        {
+            var query = _contexto.Usuarios.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(busqueda))
+                query = query.Where(u => u.Nombre.Contains(busqueda) || u.Apellido.Contains(busqueda));
+
+            return await query.ToListAsync();
+        }
         public async Task PostUsuarioAsync(Usuario usuario) 
         {
             await _contexto.Usuarios.AddAsync(usuario);
