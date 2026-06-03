@@ -15,7 +15,7 @@ namespace APP_PRUEBA_1.Controllers
             _servicio = servicio;
         }
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult Login()
         {
             return View();
         }
@@ -23,27 +23,35 @@ namespace APP_PRUEBA_1.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginDTO login)
         {
-            var resultado = await _servicio.GetUsuarioByCredencialesAsync(login.Nombre, login.Pass);
-            if (!resultado.IsValid) 
+            try
             {
-                TempData["Errores"] = string.Join("|", resultado.Errors);
-                return View(login);
-            }
+                var resultado = await _servicio.GetUsuarioByCredencialesAsync(login.Nombre, login.Pass);
+                if (!resultado.IsValid)
+                {
+                    TempData["Errores"] = string.Join("|", resultado.Errors);
+                    return View(login);
+                }
 
-            var claims = new List<Claim>
+                var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, resultado.Value.IdUsuario.ToString()),
                 new Claim(ClaimTypes.Name, resultado.Value.Nombre),
                 new Claim(ClaimTypes.Role, resultado.Value.Rol)
             };
 
-            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
-            var principal = new ClaimsPrincipal(identity);
+                var principal = new ClaimsPrincipal(identity);
 
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
 
-            return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home");
+            }
+            catch (Exception ex) 
+            {
+                TempData["Errores"] = ex.Message;
+                return View(login);
+            }
         }
 
         [HttpPost]
