@@ -7,7 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Views\Usuarios\Edit.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="efpt.config.json.user" />
+    <None Include="Views\Usuarios\Edit.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
