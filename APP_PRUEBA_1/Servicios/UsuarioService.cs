@@ -37,18 +37,18 @@ namespace APP_PRUEBA_1.Servicios
             
             if (existe != null) return Result<Usuario>.Failure("Ya existe un usuario con estas credenciales");
             await _repositorio.PostUsuarioAsync(usuario);
-            return Result<Usuario>.Success(existe);
+            return Result<Usuario>.Success(usuario);
         }
         public async Task<Result<Usuario>> PutUsuarioAsync(Usuario usuario) 
         {
             var existe = await _repositorio.GetUsuarioByIdAsync(usuario.IdUsuario);
             if (existe == null) return Result<Usuario>.Failure($"No existe el usuario con el id {usuario.IdUsuario}");
 
-            var verificacionCredenciales = await _repositorio.GetUsuarioByCredencialesAsync(usuario.Nombre, usuario.Pass);
-            if (verificacionCredenciales != null) return Result<Usuario>.Failure("Ya existe un usuario con estas credenciales");
+            var verificacionNombre = await _repositorio.GetUsuarioByNameAsync(usuario.Nombre);
+            if (verificacionNombre != null && verificacionNombre.IdUsuario != usuario.IdUsuario) return Result<Usuario>.Failure("Ya existe un usuario con este nombre de usuario");
 
-            await _repositorio.PutUsuarioAsync(existe);
-            return Result<Usuario>.Success(existe);
+            await _repositorio.PutUsuarioAsync(usuario);
+            return Result<Usuario>.Success(usuario);
         }
 
         public async Task<Result<Usuario>> DeleteUsuarioByIdAsync(int id) 

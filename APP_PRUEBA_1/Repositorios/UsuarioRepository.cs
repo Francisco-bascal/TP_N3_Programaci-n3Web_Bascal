@@ -22,6 +22,10 @@ namespace APP_PRUEBA_1.Repositorios
         {
             return await _contexto.Usuarios.FirstOrDefaultAsync(u => u.Nombre.Equals(nombreUsuario) && u.Pass.Equals(contraseña));
         }
+        public async Task<Usuario?> GetUsuarioByNameAsync(string nombre) 
+        {
+            return await _contexto.Usuarios.FirstOrDefaultAsync(u => u.Nombre.Equals(nombre));
+        }
         public async Task PostUsuarioAsync(Usuario usuario) 
         {
             await _contexto.Usuarios.AddAsync(usuario);
