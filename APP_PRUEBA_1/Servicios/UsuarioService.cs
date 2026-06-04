@@ -58,11 +58,17 @@ namespace APP_PRUEBA_1.Servicios
 
         public async Task<Result<Usuario>> DeleteUsuarioByIdAsync(int id) 
         {
+            var usuarios = await _repositorio.GetUsuariosAsync();
+            var admins = usuarios.Where(u => u.Rol.Equals("Administrador"));
             var existe = await _repositorio.GetUsuarioByIdAsync(id);
+
             if (existe == null) return Result<Usuario>.Failure($"No existe el usuario con el id {id}");
+
+            if (admins.Count() == 1 && existe.Rol.Equals("Administrador")) return Result<Usuario>.Failure("No se puede eliminar al último administrador");
 
             if (existe.IdUsuario.Equals(1)) return Result<Usuario>.Failure("Usuario Protegido: No se puede eliminar al administrador general del sistema");
 
+            //Falta la regla de no autoeliminación
             await _repositorio.DeleteUsuarioByIdAsync(id);
             return Result<Usuario>.Success(existe);
         }

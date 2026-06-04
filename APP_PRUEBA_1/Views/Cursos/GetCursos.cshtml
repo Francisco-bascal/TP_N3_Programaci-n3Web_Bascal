@@ -61,21 +61,24 @@
                         Editar
                     </a>
 
-                    <form asp-action="Delete"
-                          method="post"
-                          style="display:inline;">
+                    @if (User.IsInRole("Administrador"))
+                    {
+                        <form asp-action="Delete"
+                              method="post"
+                              style="display:inline;">
 
-                        <input type="hidden"
-                               name="id"
-                               value="@curso.IdCurso" />
+                            <input type="hidden"
+                                   name="id"
+                                   value="@curso.IdCurso" />
 
-                        <button type="submit"
-                                class="btn btn-danger btn-sm"
-                                onclick="return confirm('¿Eliminar curso?');">
+                            <button type="submit"
+                                    class="btn btn-danger btn-sm"
+                                    onclick="return confirm('¿Eliminar curso?');">
 
-                            Eliminar
-                        </button>
-                    </form>
+                                Eliminar
+                            </button>
+                        </form>
+                    }
 
                     <a asp-action="GetCursoById"
                        asp-route-id="@curso.IdCurso"

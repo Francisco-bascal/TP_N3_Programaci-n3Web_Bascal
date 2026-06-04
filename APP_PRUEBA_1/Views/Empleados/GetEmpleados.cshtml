@@ -53,7 +53,10 @@
         <button type="submit" class="btn btn-primary">Buscar</button>
     </form>
 
-    <a asp-action="Create" class="btn btn-primary">Nuevo Empleado</a>
+    @if (User.IsInRole("Administrador") || User.IsInRole("Operador"))
+    {
+        <a asp-action="Create" class="btn btn-primary">Nuevo Empleado</a>
+    }
 
 </div>
 
@@ -87,14 +90,17 @@
                     <a asp-action="Edit" asp-route-id="@emp.IdEmpleado" class="btn btn-warning btn-sm">
                         Editar
                     </a>
-
-                    <form asp-action="DeleteEmpleado" method="post" style="display:inline;">
-                        <input type="hidden" name="id" value="@emp.IdEmpleado" />
-                        <button type="submit" class="btn btn-danger btn-sm"
-                                onclick="return confirm('¿Eliminar empleado?');">
-                            Eliminar
-                        </button>
-                    </form>
+                    
+                    @if (User.IsInRole("Administrador"))
+                    {
+                        <form asp-action="DeleteEmpleado" method="post" style="display:inline;">
+                            <input type="hidden" name="id" value="@emp.IdEmpleado" />
+                            <button type="submit" class="btn btn-danger btn-sm"
+                                    onclick="return confirm('¿Eliminar empleado?');">
+                                Eliminar
+                            </button>
+                        </form>
+                    }
 
                     <a asp-action="GetEmpleadoById" asp-route-id="@emp.IdEmpleado" class="btn btn-primary btn-sm">
                         Detalles

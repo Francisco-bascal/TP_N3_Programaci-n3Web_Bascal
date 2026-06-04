@@ -56,13 +56,16 @@
                         Editar
                     </a>
 
-                    <form asp-action="DeleteDepartamento" method="post" style="display:inline;">
-                        <input type="hidden" name="id" value="@dep.IdDepartamento" />
-                        <button type="submit" class="btn btn-danger btn-sm"
-                                onclick="return confirm('¿Eliminar departamento?');">
-                            Eliminar
-                        </button>
-                    </form>
+                    @if (User.IsInRole("Administrador"))
+                    {
+                        <form asp-action="DeleteDepartamento" method="post" style="display:inline;">
+                            <input type="hidden" name="id" value="@dep.IdDepartamento" />
+                            <button type="submit" class="btn btn-danger btn-sm"
+                                    onclick="return confirm('¿Eliminar departamento?');">
+                                Eliminar
+                            </button>
+                        </form>
+                    }
 
                     <a asp-action="GetDepartamentoById" asp-route-id="@dep.IdDepartamento" class="btn btn-primary btn-sm">
                         Detalles
