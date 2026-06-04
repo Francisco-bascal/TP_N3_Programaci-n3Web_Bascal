@@ -3,7 +3,6 @@ using APP_PRUEBA_1.Repositorios;
 using APP_PRUEBA_1.Servicios;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies; //para la gestión de sesiones
-using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,7 +27,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     {
         options.LoginPath = "/Auth/Login";
         options.AccessDeniedPath = "/Auth/AccessDenied";
-        options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
         options.SlidingExpiration = true;
     });
 

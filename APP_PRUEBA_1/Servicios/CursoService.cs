@@ -1,6 +1,7 @@
 ﻿using APP_PRUEBA_1.Models;
 using APP_PRUEBA_1.Repositorios;
 using APP_PRUEBA_1.Servicios.Validation;
+using Microsoft.AspNetCore.Authorization;
 
 namespace APP_PRUEBA_1.Servicios
 {
@@ -11,12 +12,12 @@ namespace APP_PRUEBA_1.Servicios
         {
             _repositorio = repositorio;
         }
-
+        [Authorize(Roles = "Administrador,Operador")]
         public async Task<ICollection<Curso>> GetCursosAsync() 
         {
             return await _repositorio.GetCursosAsync();
         }
-
+        [Authorize(Roles = "Administrador,Operador")]
         public async Task<Result<Curso>> GetCursoByIdAsync(int id) 
         {
             var resultado = ValidationService.Validar<int>(id, ValidationService.IdMayorCero);
@@ -27,14 +28,14 @@ namespace APP_PRUEBA_1.Servicios
 
             return Result<Curso>.Success(existe);
         }
-
+        [Authorize(Roles = "Administrador,Operador")]
         public async Task<Result<IEnumerable<Curso>>> GetCursosByNameAsync(string? busqueda) 
         {
             var existe = await _repositorio.GetCursosByNameAsync(busqueda);
             //if (existe == null) return Result<ICollection<Curso>>.Failure("Ningún curso cumple con el criterio de búsqueda");
             return Result<IEnumerable<Curso>>.Success(existe);
         }
-
+        [Authorize(Roles = "Administrador,Operador")]
         public async Task<Result<Curso>> PostCursoAsync(Curso curso) 
         {
             var resultado = ValidationService.Validar<Curso>(curso, ValidationService.ValidarModeloCurso);
@@ -43,7 +44,7 @@ namespace APP_PRUEBA_1.Servicios
             await _repositorio.PostCursoAsync(curso);
             return resultado;
         }
-
+        [Authorize(Roles = "Administrador,Operador")]
         public async Task<Result<Curso>> PutCursoAsync(Curso curso) 
         {
             var resultado = ValidationService.Validar<Curso>(curso, ValidationService.ValidarModeloCurso);
@@ -52,7 +53,7 @@ namespace APP_PRUEBA_1.Servicios
             await _repositorio.PutCursoAsync(curso);
             return resultado;
         }
-
+        [Authorize(Roles = "Administrador")]
         public async Task<Result<Curso>> DeleteCursoByIdAsync(int id) 
         {
             var resultado = ValidationService.Validar<int>(id, ValidationService.IdMayorCero);

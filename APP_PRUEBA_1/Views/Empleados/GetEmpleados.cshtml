@@ -87,9 +87,12 @@
                 <td>@emp.CantidadHijos</td>
                 <td>@emp.IdDepartamentoNavigation?.Nombre</td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@emp.IdEmpleado" class="btn btn-warning btn-sm">
-                        Editar
-                    </a>
+                    @if (User.IsInRole("Administrador") || User.IsInRole("Operador"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@emp.IdEmpleado" class="btn btn-warning btn-sm">
+                            Editar
+                        </a>
+                    }
                     
                     @if (User.IsInRole("Administrador"))
                     {

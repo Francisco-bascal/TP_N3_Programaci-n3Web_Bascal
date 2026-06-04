@@ -38,19 +38,24 @@ namespace APP_PRUEBA_1.Servicios
         }
         public async Task<Result<Usuario>> PostUsuarioAsync(Usuario usuario) 
         {
-            var existe = await _repositorio.GetUsuarioByCredencialesAsync(usuario.Nombre, usuario.Pass);
+            var existe = await _repositorio.GetUsuarioByNameAsync(usuario.Nombre);
             
-            if (existe != null) return Result<Usuario>.Failure("Ya existe un usuario con estas credenciales");
+            if (existe != null) return Result<Usuario>.Failure("Ya existe un usuario con este nombre de usuario");
             await _repositorio.PostUsuarioAsync(usuario);
             return Result<Usuario>.Success(usuario);
         }
         public async Task<Result<Usuario>> PutUsuarioAsync(Usuario usuario) 
         {
-            var existe = await _repositorio.GetUsuarioByIdAsync(usuario.IdUsuario);
+            var existe = await _repositorio.GetUsuarioByIdAsync(usuario.IdUsuario); //para verificar existencia
+            var usuarios = await _repositorio.GetUsuariosAsync();
+            var admins = usuarios.Where(u => u.Rol.Equals("Administrador"));
+
             if (existe == null) return Result<Usuario>.Failure($"No existe el usuario con el id {usuario.IdUsuario}");
 
             var verificacionNombre = await _repositorio.GetUsuarioByNameAsync(usuario.Nombre);
             if (verificacionNombre != null && verificacionNombre.IdUsuario != usuario.IdUsuario) return Result<Usuario>.Failure("Ya existe un usuario con este nombre de usuario");
+
+            if (admins.Count() == 1 && existe.Rol.Equals("Administrador") && usuario.Rol.Equals("Operador")) return Result<Usuario>.Failure("Debe quedar por lo menos 1 administrador en el sistema");
 
             await _repositorio.PutUsuarioAsync(usuario);
             return Result<Usuario>.Success(usuario);
@@ -64,7 +69,7 @@ namespace APP_PRUEBA_1.Servicios
 
             if (existe == null) return Result<Usuario>.Failure($"No existe el usuario con el id {id}");
 
-            if (admins.Count() == 1 && existe.Rol.Equals("Administrador")) return Result<Usuario>.Failure("No se puede eliminar al último administrador");
+            if (admins.Count() == 1 && existe.Rol.Equals("Administrador")) return Result<Usuario>.Failure("No se puede eliminar al único administrador");
 
             if (existe.IdUsuario.Equals(1)) return Result<Usuario>.Failure("Usuario Protegido: No se puede eliminar al administrador general del sistema");
 

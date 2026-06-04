@@ -3,8 +3,11 @@ using APP_PRUEBA_1.Models.DTOs;
 using APP_PRUEBA_1.Models.ViewModels;
 using APP_PRUEBA_1.Servicios;
 using APP_PRUEBA_1.Servicios.Validation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+
+//Decidir si operador tiene acceso a los reportes.
 
 namespace APP_PRUEBA_1.Controllers
 {
@@ -16,11 +19,15 @@ namespace APP_PRUEBA_1.Controllers
             _servicio = servicio;
         }
 
+        [HttpGet]
+        [Authorize(Roles = "Administrador,Operador")]
         public IActionResult Reportes() 
         {
             return View();
         }
 
+        [HttpGet]
+        [Authorize(Roles = "Administrador,Operador")]
         public async Task<IActionResult> EmpleadosPorDepartamento() 
         {
             Result<IEnumerable<EmpleadosPorDepartamentoVM>> resultado;
@@ -41,6 +48,8 @@ namespace APP_PRUEBA_1.Controllers
             }
         }
 
+        [HttpGet]
+        [Authorize(Roles = "Administrador,Operador")]
         public async Task<IActionResult> EmpleadosAgrupadosPorDepartamento() 
         {
             Result<IEnumerable<EmpleadosAgrupadosPorDepartamentoVM>> resultado;
@@ -61,6 +70,8 @@ namespace APP_PRUEBA_1.Controllers
             }
         }
 
+        [HttpGet]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> ReporteFiltroEspecializado(FiltroEmpleadoDTO filtros) 
         {
             Result<IEnumerable<Empleado>> resultado;
@@ -91,6 +102,8 @@ namespace APP_PRUEBA_1.Controllers
             }
         }
 
+        [HttpGet]
+        [Authorize(Roles = "Administrador,Operador")]
         public async Task<IActionResult> ReporteEmpleadosPorCurso(int? idCurso) 
         {
             Result<EmpleadosPorCursoVM> resultado;

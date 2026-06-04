@@ -1,5 +1,6 @@
 ﻿using APP_PRUEBA_1.Models;
 using APP_PRUEBA_1.Servicios;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace APP_PRUEBA_1.Controllers
@@ -11,7 +12,9 @@ namespace APP_PRUEBA_1.Controllers
         {
             _servicio = servicio;
         }
+
         [HttpGet]
+        [Authorize(Roles = "Administrador,Operador")]
         public async Task<IActionResult> GetCursosAsync()
         {
             try
@@ -26,6 +29,7 @@ namespace APP_PRUEBA_1.Controllers
             }
         }
         [HttpGet]
+        [Authorize(Roles = "Administrador,Operador")]
         public async Task<IActionResult> GetCursoByIdAsync(int id)
         {
             try
@@ -45,6 +49,7 @@ namespace APP_PRUEBA_1.Controllers
             }
         }
         [HttpGet]
+        [Authorize(Roles = "Administrador,Operador")]
         public async Task<IActionResult> GetCursosByNameAsync(string? busqueda)
         {
             try
@@ -58,14 +63,14 @@ namespace APP_PRUEBA_1.Controllers
                 return RedirectToAction("GetCursos");
             }
         }
-        //
         [HttpGet]
+        [Authorize(Roles = "Administrador,Operador")]
         public IActionResult Create()
         {
             return View();
         }
-
         [HttpPost]
+        [Authorize(Roles = "Administrador,Operador")]
         public async Task<IActionResult> CreateAsync(Curso curso)
         {
             try
@@ -87,8 +92,8 @@ namespace APP_PRUEBA_1.Controllers
                 return View(curso);
             }
         }
-
         [HttpGet]
+        [Authorize(Roles = "Administrador,Operador")]
         public async Task<IActionResult> EditAsync(int id)
         {
             try
@@ -109,8 +114,8 @@ namespace APP_PRUEBA_1.Controllers
                 return RedirectToAction("GetCursos");
             }
         }
-
         [HttpPost]
+        [Authorize(Roles = "Administrador,Operador")]
         public async Task<IActionResult> EditAsync(Curso curso)
         {
             try
@@ -132,8 +137,8 @@ namespace APP_PRUEBA_1.Controllers
                 return View("Edit", curso);
             }
         }
-
         [HttpPost]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> DeleteAsync(int id)
         {
             try

@@ -1,11 +1,12 @@
 ﻿using APP_PRUEBA_1.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
 using APP_PRUEBA_1.Servicios;
 using APP_PRUEBA_1.Servicios.Validation;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 
 namespace APP_PRUEBA_1.Controllers
 {
@@ -18,6 +19,7 @@ namespace APP_PRUEBA_1.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Administrador,Operador")]
         public async Task<IActionResult> GetDepartamentosAsync() 
         {
             try
@@ -33,6 +35,7 @@ namespace APP_PRUEBA_1.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Administrador,Operador")]
         public async Task<IActionResult> GetDepartamentoByIdAsync(int id) 
         {
             Result<Departamento> resultado;
@@ -54,6 +57,7 @@ namespace APP_PRUEBA_1.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Administrador,Operador")]
         public async Task<IActionResult> GetDepartamentoByNameOrIdAsync(string busqueda) 
         {
             Result<IEnumerable<Departamento>> resultado;
@@ -75,12 +79,14 @@ namespace APP_PRUEBA_1.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Administrador,Operador")]
         public IActionResult Create() 
         {
             return View();
         }
 
         [HttpPost]
+        [Authorize(Roles = "Administrador,Operador")]
         public async Task<IActionResult> PostDepartamentoAsync(Departamento departamento) 
         {
             Result<Departamento> resultado;
@@ -103,6 +109,7 @@ namespace APP_PRUEBA_1.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Administrador,Operador")]
         public async Task<IActionResult> EditAsync(int id) 
         {
             Result<Departamento> resultado;
@@ -124,6 +131,7 @@ namespace APP_PRUEBA_1.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Administrador,Operador")]
         public async Task<IActionResult> EditAsync(Departamento departamento) 
         {
             Result<Departamento> resultado;
@@ -146,6 +154,7 @@ namespace APP_PRUEBA_1.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> DeleteDepartamentoAsync(int id) 
         {
             Result<Departamento> resultado;

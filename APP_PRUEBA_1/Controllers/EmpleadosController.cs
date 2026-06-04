@@ -1,11 +1,12 @@
 ﻿using APP_PRUEBA_1.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
 using APP_PRUEBA_1.Servicios;
 using APP_PRUEBA_1.Servicios.Validation;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 
 namespace APP_PRUEBA_1.Controllers
 {
@@ -37,7 +38,7 @@ namespace APP_PRUEBA_1.Controllers
             }
         }
 
-        [HttpGet] 
+        [HttpGet]
         public async Task<IActionResult> GetEmpleadoByIdAsync(int id) 
         {
             try
@@ -84,6 +85,7 @@ namespace APP_PRUEBA_1.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Administrador,Operador")]
         public async Task<IActionResult> Create() //para mostrar el formulario de agregación de empleado
         {
             var departamentos = await _servicioDepartamento.GetDepartamentosAsync();
@@ -93,6 +95,7 @@ namespace APP_PRUEBA_1.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Administrador,Operador")]
         public async Task<IActionResult> PostEmpleadoAsync(Empleado empleado) 
         {
             try
@@ -119,6 +122,7 @@ namespace APP_PRUEBA_1.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Administrador,Operador")]
         public async Task<IActionResult> EditAsync(int id)
         {
             try
@@ -144,10 +148,12 @@ namespace APP_PRUEBA_1.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Administrador,Operador")]
         public async Task<IActionResult> EditAsync(Empleado empleado, List<int> CursosSeleccionados)
         {
             try
             {
+                //Estudiar esto
                 empleado.IdCursos = (CursosSeleccionados ?? new List<int>()) //si no se marca ningún checkbox se envía al repo limpiar la propiedad Muchos a Muchos. Sino se le envían los cursos a los que está asignado
                     .Select(id => new Curso { IdCurso = id }).ToList();
 
@@ -175,6 +181,7 @@ namespace APP_PRUEBA_1.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> DeleteEmpleadoAsync(int id) 
         {
             try

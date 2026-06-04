@@ -1,6 +1,7 @@
 ﻿using APP_PRUEBA_1.Models;
 using APP_PRUEBA_1.Servicios;
 using APP_PRUEBA_1.Servicios.Validation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -15,6 +16,7 @@ namespace APP_PRUEBA_1.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> GetUsuarios()
         {
             try
@@ -28,6 +30,7 @@ namespace APP_PRUEBA_1.Controllers
             }
         }
         [HttpGet]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> GetUsuariosFiltrados(string busqueda) 
         {
             try
@@ -47,6 +50,7 @@ namespace APP_PRUEBA_1.Controllers
             }
         }
         [HttpGet]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Detalles(int id)
         {
             try
@@ -66,11 +70,13 @@ namespace APP_PRUEBA_1.Controllers
             }
         }
         [HttpGet]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Create()
         {
             return View();
         }
         [HttpPost]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Create(Usuario usuario)
         {
             try
@@ -91,6 +97,7 @@ namespace APP_PRUEBA_1.Controllers
             }
         }
         [HttpGet]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Edit(int id)
         {
             try
@@ -111,6 +118,7 @@ namespace APP_PRUEBA_1.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Edit(Usuario usuario)
         {
             Result<Usuario> resultado;
@@ -132,6 +140,7 @@ namespace APP_PRUEBA_1.Controllers
             }
         }
         [HttpPost]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Delete(int id) 
         {
             try
