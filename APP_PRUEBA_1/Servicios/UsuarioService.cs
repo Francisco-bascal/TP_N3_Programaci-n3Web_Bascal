@@ -61,7 +61,8 @@ namespace APP_PRUEBA_1.Servicios
             var verificacionNombre = await _repositorio.GetUsuarioByNameAsync(usuario.Nombre);
             if (verificacionNombre != null && verificacionNombre.IdUsuario != usuario.IdUsuario) return Result<Usuario>.Failure("Ya existe un usuario con este nombre de usuario");
 
-            if (admins.Count() == 1 && existe.Rol.Equals("Administrador") && usuario.Rol.Equals("Operador")) return Result<Usuario>.Failure("Debe quedar por lo menos 1 administrador en el sistema");
+            if (admins.Count() == 1 && existe.Rol.Equals("Administrador") && !usuario.Rol.Equals("Administrador")) return Result<Usuario>.Failure("Debe quedar por lo menos 1 administrador en el sistema");
+            if (existe.IdUsuario.Equals(1) && !usuario.Rol.Equals("Administrador")) return Result<Usuario>.Failure("No se puede degradar al administrador general del sistema");
 
             await _repositorio.PutUsuarioAsync(usuario);
             return Result<Usuario>.Success(usuario);
