@@ -25,9 +25,9 @@
 
 <h1 class="text-center mb-3">Empleados</h1>
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-
-    <form method="get" asp-action="GetEmpleadosFiltro" class="d-flex gap-2">
+<div class="d-flex justify-content-end align-items-center mb-3"> <!-- Sin data table sería between -->
+    <!-- Inutilizado por Data Tables 
+        <form method="get" asp-action="GetEmpleadosFiltro" class="d-flex gap-2">
         <input type="text" name="busqueda" class="form-control"
                placeholder="Buscar por nombre o apellido" value="@ViewBag.Busqueda" />
 
@@ -35,23 +35,24 @@
             <option value="">Todos los departamentos</option>
             @foreach (var depto in ViewBag.Departamentos)
             {
-                if (ViewBag.DepartamentoSeleccionado == depto.IdDepartamento)
-                {
-                    <option value="@depto.IdDepartamento" selected>
-                        @depto.Nombre
-                    </option>
-                }
-                else
-                {
-                    <option value="@depto.IdDepartamento">
-                        @depto.Nombre
-                    </option>
-                }
+                    if (ViewBag.DepartamentoSeleccionado == depto.IdDepartamento)
+                    {
+                            <option value="@depto.IdDepartamento" selected>
+                                @depto.Nombre
+                            </option>
+                    }
+                    else
+                    {
+                            <option value="@depto.IdDepartamento">
+                                @depto.Nombre
+                            </option>
+                    }
             }
         </select>
 
         <button type="submit" class="btn btn-primary">Buscar</button>
     </form>
+    -->
 
     @if (User.IsInRole("Administrador") || User.IsInRole("Operador"))
     {
@@ -60,7 +61,7 @@
 
 </div>
 
-<table class="table table-bordered table-striped table-hover">
+<table id="tablaEmpleados" class="table table-bordered table-striped table-hover">
     <thead class="table-dark text-light">
         <tr>
             <th>ID</th>
@@ -82,7 +83,20 @@
                 <td>@emp.Dni</td>
                 <td>@emp.Nombre</td>
                 <td>@emp.Apellido</td>
-                <td>@(emp.Estado ? "Activo" : "Inactivo")</td>
+                <!-- <td>@(emp.Estado ? "Activo" : "Inactivo")</td> -->
+                <td>
+                    @if (emp.Estado.Equals(true))
+                    {
+                        <span class="badge bg-success">
+                            Activo
+                        </span>
+                    }else
+                    {
+                        <span class="badge bg-danger">
+                            Inactivo
+                        </span>
+                    }
+                </td>
                 <td>@(emp.FechaIngreso.HasValue ? emp.FechaIngreso.Value.ToShortDateString() : "")</td>
                 <td>@emp.CantidadHijos</td>
                 <td>@emp.IdDepartamentoNavigation?.Nombre</td>
@@ -114,39 +128,13 @@
     </tbody>
 </table>
 
-@*
-<h2>Empleados</h2>
-
-<div class="row">
-    @foreach (var emp in Model)
-    {
-        <div class="col-md-4 mb-3">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">
-                        @emp.Nombre @emp.Apellido
-                    </h5>
-
-                    <p class="card-text">
-                        <strong>ID:</strong> @emp.IdEmpleado <br />
-                        <strong>Ingreso:</strong> @emp.FechaIngreso.ToShortDateString() <br />
-                        <strong>Depto:</strong> @emp.IdDepartamento
-                    </p>
-
-                    <a asp-action="Edit" asp-route-id="@emp.IdEmpleado"
-                       class="btn btn-warning btn-sm">
-                        Editar
-                    </a>
-
-                    <form asp-action="DeleteEmpleadoAsync" method="post" style="display:inline;">
-                        <input type="hidden" name="id" value="@emp.IdEmpleado" />
-                        <button type="submit" class="btn btn-danger btn-sm">
-                            Eliminar
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    }
-</div>
-*@
+@section Scripts
+{
+    <script>
+        new DataTable('#tablaEmpleados', {
+            language: {
+                url: '//cdn.datatables.net/plug-ins/2.3.3/i18n/es-ES.json'
+            }
+        });
+    </script>
+}
