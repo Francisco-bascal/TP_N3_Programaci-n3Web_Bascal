@@ -131,7 +131,16 @@ namespace APP_PRUEBA_1.Controllers
             Result<Usuario> resultado;
             try
             {
-                resultado = await _servicio.PutUsuarioAsync(usuario);
+                //Código para obtención del id del usuario logeado desde los claims
+                var claimUsuarioLogueado = User.FindFirst(ClaimTypes.NameIdentifier);
+                if (claimUsuarioLogueado == null)
+                {
+                    TempData["Errores"] = "No se pudo identificar al usuario actual";
+                    return RedirectToAction("GetUsuarios");
+                }
+                int idUsuarioActual = int.Parse(claimUsuarioLogueado.Value);
+
+                resultado = await _servicio.PutUsuarioAsync(usuario, idUsuarioActual);
                 if (!resultado.IsValid)
                 {
                     TempData["Errores"] = string.Join("|", resultado.Errors);

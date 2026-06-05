@@ -48,13 +48,15 @@ namespace APP_PRUEBA_1.Servicios
             await _repositorio.PostUsuarioAsync(usuario);
             return Result<Usuario>.Success(usuario);
         }
-        public async Task<Result<Usuario>> PutUsuarioAsync(Usuario usuario) 
+        public async Task<Result<Usuario>> PutUsuarioAsync(Usuario usuario, int idUsuarioActual) 
         {
             var existe = await _repositorio.GetUsuarioByIdAsync(usuario.IdUsuario); //para verificar existencia
             var usuarios = await _repositorio.GetUsuariosAsync();
             var admins = usuarios.Where(u => u.Rol.Equals("Administrador"));
 
             if (existe == null) return Result<Usuario>.Failure($"No existe el usuario con el id {usuario.IdUsuario}");
+
+            if (usuario.IdUsuario.Equals(idUsuarioActual)) return Result<Usuario>.Failure("No puedes editar tu propio usuario");
 
             var verificacionNombre = await _repositorio.GetUsuarioByNameAsync(usuario.Nombre);
             if (verificacionNombre != null && verificacionNombre.IdUsuario != usuario.IdUsuario) return Result<Usuario>.Failure("Ya existe un usuario con este nombre de usuario");

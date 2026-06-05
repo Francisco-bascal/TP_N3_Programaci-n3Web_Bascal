@@ -27,6 +27,7 @@ namespace APP_PRUEBA_1.Controllers
             try
             {
                 var resultado = await _servicio.GetUsuarioByCredencialesAsync(login.Nombre, login.Pass);
+
                 if (!resultado.IsValid)
                 {
                     TempData["Errores"] = string.Join("|", resultado.Errors);
@@ -34,17 +35,16 @@ namespace APP_PRUEBA_1.Controllers
                 }
 
                 var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.NameIdentifier, resultado.Value.IdUsuario.ToString()),
-                new Claim(ClaimTypes.Name, resultado.Value.Nombre),
-                new Claim(ClaimTypes.Role, resultado.Value.Rol)
-            };
+                {
+                    new Claim(ClaimTypes.NameIdentifier, resultado.Value.IdUsuario.ToString()),
+                    new Claim(ClaimTypes.Name, resultado.Value.Nombre),
+                    new Claim(ClaimTypes.Role, resultado.Value.Rol)
+                };
 
                 var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
                 var principal = new ClaimsPrincipal(identity);
 
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
                 return RedirectToAction("Index", "Home");
             }
