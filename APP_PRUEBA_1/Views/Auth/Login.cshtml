@@ -17,21 +17,6 @@
     <link rel="stylesheet" href="~/APP_PRUEBA_1.styles.css" asp-append-version="true" />
 </head>
 <body>
-
-        @if (TempData["Errores"] != null)
-        {
-            var errores = TempData["Errores"].ToString().Split("|");
-
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach (var error in errores)
-                    {
-                        <li>@error</li>
-                    }
-                </ul>
-            </div>
-        }
-
         <h2 class="text-center my-5">Iniciar Sesión</h2>
 
         <div class="container d-flex justify-content-center">
@@ -68,5 +53,29 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <!-- Sweet Alert --->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    @if (TempData["Exito"] != null)
+    {
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Éxito',
+                 text: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(TempData["Exito"]))
+            });
+        </script>
+    }
+
+    @if (TempData["Errores"] != null)
+    {
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(TempData["Errores"]))
+            });
+        </script>
+    }
 </body>
 </html>
