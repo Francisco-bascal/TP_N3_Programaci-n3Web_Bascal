@@ -61,13 +61,15 @@ namespace APP_PRUEBA_1.Servicios
             return Result<Usuario>.Success(usuario);
         }
 
-        public async Task<Result<Usuario>> DeleteUsuarioByIdAsync(int id) 
+        public async Task<Result<Usuario>> DeleteUsuarioByIdAsync(int id, int idUsuarioActual) 
         {
             var usuarios = await _repositorio.GetUsuariosAsync();
             var admins = usuarios.Where(u => u.Rol.Equals("Administrador"));
             var existe = await _repositorio.GetUsuarioByIdAsync(id);
 
             if (existe == null) return Result<Usuario>.Failure($"No existe el usuario con el id {id}");
+
+            if (id.Equals(idUsuarioActual)) return Result<Usuario>.Failure("No puedes eliminar tu propio usuario");
 
             if (admins.Count() == 1 && existe.Rol.Equals("Administrador")) return Result<Usuario>.Failure("No se puede eliminar al único administrador");
 

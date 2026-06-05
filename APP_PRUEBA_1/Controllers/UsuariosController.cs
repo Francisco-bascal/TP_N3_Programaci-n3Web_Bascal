@@ -3,6 +3,7 @@ using APP_PRUEBA_1.Servicios;
 using APP_PRUEBA_1.Servicios.Validation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace APP_PRUEBA_1.Controllers
@@ -145,7 +146,16 @@ namespace APP_PRUEBA_1.Controllers
         {
             try
             {
-                var resultado = await _servicio.DeleteUsuarioByIdAsync(id);
+                //Se pasa el id del usuario logeado actual para evitar que se elimine a el mismo en el servicio
+                var claimUsuarioLogueado = User.FindFirst(ClaimTypes.NameIdentifier);
+                if (claimUsuarioLogueado == null) 
+                {
+                    TempData["Errores"] = "No se pudo identificar al usuario actual";
+                    return RedirectToAction("GetUsuarios");
+                }
+                int idUsuarioActual = int.Parse(claimUsuarioLogueado.Value);
+
+                var resultado = await _servicio.DeleteUsuarioByIdAsync(id, idUsuarioActual);
                 if (!resultado.IsValid) 
                 {
                     TempData["Errores"] = string.Join("|", resultado.Errors);
