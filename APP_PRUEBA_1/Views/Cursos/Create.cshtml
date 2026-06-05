@@ -1,28 +1,5 @@
 ﻿@model APP_PRUEBA_1.Models.Curso
 
-@if (TempData["Errores"] != null)
-{
-    var errores = TempData["Errores"].ToString().Split("|");
-
-    <div class="alert alert-danger">
-        <ul>
-            @foreach (var error in errores)
-            {
-                <li>@error</li>
-            }
-        </ul>
-    </div>
-}
-
-@if (TempData["Exito"] is string exito)
-{
-    <div class="alert alert-success">
-        <ul>
-            @exito
-        </ul>
-    </div>
-}
-
 <h2 class="text-center mb-3">Nuevo Curso</h2>
 
 <div class="container d-flex justify-content-center align-items-center">

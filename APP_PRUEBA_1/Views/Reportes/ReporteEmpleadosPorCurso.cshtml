@@ -1,18 +1,5 @@
 ﻿@model APP_PRUEBA_1.Models.ViewModels.EmpleadosPorCursoVM
 
-@if (TempData["Errores"] != null)
-{
-    var errores = TempData["Errores"].ToString().Split("|");
-        <div class="alert alert-danger">
-            <ul>
-                @foreach (var error in errores)
-                {
-                    <li>@error</li>
-                }
-            </ul>
-        </div>
-}
-
     <h2 class="text-center mb-3">Empleados por Curso</h2>
 
     <form method="get" asp-action="ReporteEmpleadosPorCurso">

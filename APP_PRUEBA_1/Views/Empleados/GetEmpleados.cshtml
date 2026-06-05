@@ -1,28 +1,5 @@
 ﻿@model IEnumerable<APP_PRUEBA_1.Models.Empleado>
 
-@if (TempData["Errores"] != null)
-{
-    var errores = TempData["Errores"].ToString().Split("|");
-
-    <div class="alert alert-danger">
-        <ul>
-            @foreach (var error in errores)
-            {
-                <li>@error</li>
-            }
-        </ul>
-    </div>
-}
-
-@if (TempData["Exito"] is string exito)
-{
-    <div class="alert alert-success">
-        <ul>
-            @exito
-        </ul>
-    </div>
-}
-
 <h1 class="text-center mb-3">Empleados</h1>
 
 <div class="d-flex justify-content-end align-items-center mb-3"> <!-- Sin data table sería between -->

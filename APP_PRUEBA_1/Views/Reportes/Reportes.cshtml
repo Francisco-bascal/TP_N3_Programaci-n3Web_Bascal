@@ -1,27 +1,4 @@
-﻿@if (TempData["Errores"] != null)
-{
-    var errores = TempData["Errores"].ToString().Split("|");
-
-    <div class="alert alert-danger">
-        <ul>
-            @foreach (var error in errores)
-            {
-                <li>@error</li>
-            }
-        </ul>
-    </div>
-}
-
-@if (TempData["Exito"] is string exito)
-{
-    <div class="alert alert-success">
-        <ul>
-            @exito
-        </ul>
-    </div>
-}
-
-<div class="container mt-4">
+﻿<div class="container mt-4">
     <h2 class="mb-4 text-center">Panel de Reportes</h2>
     <!-- Primera fila -->
     <div class="row mb-4">
