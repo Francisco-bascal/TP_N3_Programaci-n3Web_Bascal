@@ -16,7 +16,7 @@
 
 <h2 class="text-center pb-3">Empleados por Departamento</h2>
 
-<table class="table table-striped table-hover">
+<table id="tablaReporteEmpleadosDepartamento" class="table table-striped table-hover">
     <thead class="table-dark text-light">
         <tr>
             <th>Departamento</th>
@@ -33,3 +33,14 @@
         }
     </tbody>
 </table>
+
+@section Scripts
+{
+    <script>
+        new DataTable('#tablaReporteEmpleadosDepartamento', {
+            language: {
+                url: '//cdn.datatables.net/plug-ins/2.3.3/i18n/es-ES.json'
+            }
+        });
+    </script>
+}
