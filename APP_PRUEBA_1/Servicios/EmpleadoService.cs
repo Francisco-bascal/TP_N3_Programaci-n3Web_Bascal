@@ -30,6 +30,7 @@ namespace APP_PRUEBA_1.Servicios
             return Result<Empleado>.Success(empleado);
         }
 
+        //Quedó inutilizado por las Data Tables
         //Servicio para filtro de búsqueda ↨
         public async Task<Result<ICollection<Empleado>>> GetEmpleadosFiltradosAsync(string? busqueda, int? departamentoId) 
         {

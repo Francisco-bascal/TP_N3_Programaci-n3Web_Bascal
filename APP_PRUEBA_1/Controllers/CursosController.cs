@@ -28,6 +28,7 @@ namespace APP_PRUEBA_1.Controllers
                 return View();
             }
         }
+
         [HttpGet]
         [Authorize(Roles = "Administrador,Operador")]
         public async Task<IActionResult> GetCursoByIdAsync(int id)
@@ -48,6 +49,8 @@ namespace APP_PRUEBA_1.Controllers
                 return RedirectToAction("GetCursos");
             }
         }
+
+        //Quedó inutilizado por las Data Tables
         [HttpGet]
         [Authorize(Roles = "Administrador,Operador")]
         public async Task<IActionResult> GetCursosByNameAsync(string? busqueda)
@@ -63,12 +66,14 @@ namespace APP_PRUEBA_1.Controllers
                 return RedirectToAction("GetCursos");
             }
         }
+
         [HttpGet]
         [Authorize(Roles = "Administrador,Operador")]
         public IActionResult Create()
         {
             return View();
         }
+
         [HttpPost]
         [Authorize(Roles = "Administrador,Operador")]
         public async Task<IActionResult> CreateAsync(Curso curso)
@@ -92,6 +97,7 @@ namespace APP_PRUEBA_1.Controllers
                 return View(curso);
             }
         }
+
         [HttpGet]
         [Authorize(Roles = "Administrador,Operador")]
         public async Task<IActionResult> EditAsync(int id)
@@ -114,6 +120,7 @@ namespace APP_PRUEBA_1.Controllers
                 return RedirectToAction("GetCursos");
             }
         }
+
         [HttpPost]
         [Authorize(Roles = "Administrador,Operador")]
         public async Task<IActionResult> EditAsync(Curso curso)
@@ -137,6 +144,7 @@ namespace APP_PRUEBA_1.Controllers
                 return View("Edit", curso);
             }
         }
+
         [HttpPost]
         [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> DeleteAsync(int id)

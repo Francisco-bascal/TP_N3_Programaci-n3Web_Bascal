@@ -58,6 +58,7 @@ namespace APP_PRUEBA_1.Controllers
             } 
         }
 
+        //Quedó inutilizado por las Data Tables
         [HttpGet]
         public async Task<IActionResult> GetEmpleadosFiltro(string? busqueda, int? departamentoId) //se hacen nullables porque pueden no recibir nada si se da enter sin seleccionar algo
         {

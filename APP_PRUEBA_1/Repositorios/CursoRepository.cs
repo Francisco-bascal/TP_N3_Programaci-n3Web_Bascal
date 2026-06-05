@@ -20,6 +20,7 @@ namespace APP_PRUEBA_1.Repositorios
             return await _contexto.Cursos.Include(c => c.IdEmpleados).FirstOrDefaultAsync(c => c.IdCurso.Equals(id));
         }
 
+        //Quedó inutilizado por las Data Tables
         public async Task<IEnumerable<Curso>> GetCursosByNameAsync(string? busqueda) 
         {
             IQueryable<Curso> query = _contexto.Cursos;

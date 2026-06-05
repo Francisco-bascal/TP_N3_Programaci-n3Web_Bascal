@@ -30,6 +30,8 @@ namespace APP_PRUEBA_1.Controllers
                 return View();
             }
         }
+
+        //Quedó inutilizado por las Data Tables
         [HttpGet]
         [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> GetUsuariosFiltrados(string busqueda) 
@@ -50,6 +52,7 @@ namespace APP_PRUEBA_1.Controllers
                 return RedirectToAction("GetUsuarios");
             }
         }
+
         [HttpGet]
         [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Detalles(int id)
@@ -70,12 +73,14 @@ namespace APP_PRUEBA_1.Controllers
                 return RedirectToAction("GetUsuarios");
             }
         }
+
         [HttpGet]
         [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Create()
         {
             return View();
         }
+
         [HttpPost]
         [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Create(Usuario usuario)
@@ -97,6 +102,7 @@ namespace APP_PRUEBA_1.Controllers
                 return RedirectToAction("GetUsuarios");
             }
         }
+
         [HttpGet]
         [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Edit(int id)
@@ -140,6 +146,7 @@ namespace APP_PRUEBA_1.Controllers
                 return RedirectToAction("GetUsuarios");
             }
         }
+
         [HttpPost]
         [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Delete(int id) 

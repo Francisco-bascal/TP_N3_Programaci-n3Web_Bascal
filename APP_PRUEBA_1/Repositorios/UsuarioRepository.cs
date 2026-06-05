@@ -18,14 +18,20 @@ namespace APP_PRUEBA_1.Repositorios
         {
             return await _contexto.Usuarios.FirstOrDefaultAsync(u => u.IdUsuario.Equals(id));
         }
+
+        //Se usa para el login
         public async Task<Usuario?> GetUsuarioByCredencialesAsync(string nombreUsuario, string contraseña) 
         {
             return await _contexto.Usuarios.FirstOrDefaultAsync(u => u.Nombre.Equals(nombreUsuario) && u.Pass.Equals(contraseña));
         }
+
+        //Se usa en el servicio para validar que no se intente crear o editar un usuario con el nombre de uno ya existente
         public async Task<Usuario?> GetUsuarioByNameAsync(string nombre) 
         {
             return await _contexto.Usuarios.FirstOrDefaultAsync(u => u.Nombre.Equals(nombre));
         }
+
+        //Quedó inutilizado por las Data Tables
         public async Task<ICollection<Usuario>> GetUsuarioByNameOrLastNameAsync(string? busqueda) 
         {
             var query = _contexto.Usuarios.AsQueryable();

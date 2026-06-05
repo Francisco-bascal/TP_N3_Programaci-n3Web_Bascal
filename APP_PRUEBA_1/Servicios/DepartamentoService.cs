@@ -27,6 +27,8 @@ namespace APP_PRUEBA_1.Servicios
 
             return Result<Departamento>.Success(existe);
         }
+
+        //Quedó inutilizado por las Data Tables
         public async Task<Result<IEnumerable<Departamento>>> GetDepartamentosByNameOrIdAsync(string busqueda) 
         {
             if (string.IsNullOrWhiteSpace(busqueda)) return Result<IEnumerable<Departamento>>.Failure("El filtro de búsqueda no puede estar vacío");

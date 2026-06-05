@@ -14,6 +14,7 @@ namespace APP_PRUEBA_1.Controllers
         {
             _servicio = servicio;
         }
+
         [HttpGet]
         public IActionResult Login()
         {
@@ -64,7 +65,7 @@ namespace APP_PRUEBA_1.Controllers
         [HttpGet]
         public IActionResult AccessDenied()
         {
-            return View();
+            return View(); //Esto Implementarlo con SWEET ALERT
         }
     }
 }

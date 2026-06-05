@@ -23,6 +23,8 @@ namespace APP_PRUEBA_1.Servicios
 
             return Result<Usuario>.Success(existe);
         }
+
+        //Se usa para el login
         public async Task<Result<Usuario>> GetUsuarioByCredencialesAsync(string nombreUsuario, string contraseña) 
         {
             var existe = await _repositorio.GetUsuarioByCredencialesAsync(nombreUsuario, contraseña);
@@ -31,6 +33,8 @@ namespace APP_PRUEBA_1.Servicios
 
             return Result<Usuario>.Success(existe);
         }
+
+        //Quedó inutilizado por las Data Tables
         public async Task<Result<ICollection<Usuario>>> GetUsuarioByNameOrLastNameAsync(string? busqueda) 
         {
             var usuarios = await _repositorio.GetUsuarioByNameOrLastNameAsync(busqueda);

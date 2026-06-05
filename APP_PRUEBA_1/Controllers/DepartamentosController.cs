@@ -56,6 +56,7 @@ namespace APP_PRUEBA_1.Controllers
             }
         }
 
+        //Quedó inutilizado por las Data Tables
         [HttpGet]
         [Authorize(Roles = "Administrador,Operador")]
         public async Task<IActionResult> GetDepartamentoByNameOrIdAsync(string busqueda) 

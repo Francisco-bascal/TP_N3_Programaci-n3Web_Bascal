@@ -19,6 +19,8 @@ namespace APP_PRUEBA_1.Repositorios
             var departamento = await _contexto.Departamentos.Include(d => d.Empleados).FirstOrDefaultAsync(d => d.IdDepartamento.Equals(id));
             return departamento;
         }
+
+        //Quedó inutilizado por las Data Tables
         public async Task<IEnumerable<Departamento>> GetDepartamentoByNameOrId(string busqueda) 
         {
             //var departamentos = await _contexto.Departamentos.Where(d => d.Nombre.Contains(busqueda)).ToListAsync();

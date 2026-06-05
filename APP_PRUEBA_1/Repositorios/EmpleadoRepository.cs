@@ -30,6 +30,8 @@ namespace APP_PRUEBA_1.Repositorios
             await _contexto.Empleados.AddAsync(empleado);
             await _contexto.SaveChangesAsync();
         }
+
+        //Quedó inutilizado por las Data Tables
         //Repo para Filtro de Búsqueda ↨
         public async Task<ICollection<Empleado>> GetEmpleadosFiltradosAsync(string? busqueda, int? departamentoId)
         {
