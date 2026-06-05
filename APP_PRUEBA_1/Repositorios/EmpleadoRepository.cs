@@ -59,6 +59,7 @@ namespace APP_PRUEBA_1.Repositorios
 
             existe.IdCursos.Clear();
 
+            //Reasignación segura de los cursos por checkbox al empleado
             foreach (var curso in empleado.IdCursos)
             {
                 var cursoExistente = await _contexto.Cursos.FindAsync(curso.IdCurso);

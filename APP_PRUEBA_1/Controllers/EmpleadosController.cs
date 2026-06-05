@@ -90,7 +90,8 @@ namespace APP_PRUEBA_1.Controllers
         public async Task<IActionResult> Create() //para mostrar el formulario de agregación de empleado
         {
             var departamentos = await _servicioDepartamento.GetDepartamentosAsync();
-            ViewBag.Departamentos = new SelectList(departamentos, "IdDepartamento", "Nombre"); //Esto permite el listado desplegable para seleccionar el departamento en el frontend
+            //Se pasan los departamentos para el filtro de la vista (Esto quedó obsoleto por las Data Tables)
+            ViewBag.Departamentos = new SelectList(departamentos, "IdDepartamento", "Nombre");
 
             return View();
         }
@@ -134,10 +135,12 @@ namespace APP_PRUEBA_1.Controllers
                 if (!resultado.IsValid) //no debería fallar al ser un GetById pero se implementa de todos modos por seguridad
                 {
                     TempData["Errores"] = string.Join("|", resultado.Errors);
+                    //Se pasan los departamentos para el filtro de la vista (Esto quedó obsoleto por las Data Tables)
                     ViewBag.Departamentos = new SelectList(departamentos, "IdDepartamento", "Nombre", resultado?.Value?.IdDepartamento); //se vuelven a pasar los Departamentos en caso de que la creación no sea válida
                     return RedirectToAction("GetEmpleados");
                 }
-                ViewBag.Cursos = await _servicioCurso.GetCursosAsync();
+                ViewBag.Cursos = await _servicioCurso.GetCursosAsync(); //Se pasan los cursos para la selección del checkbox
+                //Se pasan los departamentos para el filtro de la vista (Esto quedó obsoleto por las Data Tables)
                 ViewBag.Departamentos = new SelectList(departamentos, "IdDepartamento", "Nombre", resultado?.Value?.IdDepartamento);
                 return View(resultado?.Value);
             }
@@ -154,17 +157,19 @@ namespace APP_PRUEBA_1.Controllers
         {
             try
             {
-                //Estudiar esto
-                empleado.IdCursos = (CursosSeleccionados ?? new List<int>()) //si no se marca ningún checkbox se envía al repo limpiar la propiedad Muchos a Muchos. Sino se le envían los cursos a los que está asignado
+                //Si no se marca ningún checkbox se envía al repo limpiar la propiedad Muchos a Muchos. 
+                //Sino se le envían los cursos a los que está asignado.
+                empleado.IdCursos = (CursosSeleccionados ?? new List<int>())
                     .Select(id => new Curso { IdCurso = id }).ToList();
 
                 var resultado = await _servicio.PutEmpleadoAsync(empleado);
                 if (!resultado.IsValid)
                 {
                     TempData["Errores"] = string.Join("|", resultado.Errors);
-                    var departamentos = await _servicioDepartamento.GetDepartamentosAsync(); //se vuelve a rellenar el viewbag
+                    //Se pasan los departamentos para el filtro de la vista (Esto quedó obsoleto por las Data Tables)
+                    var departamentos = await _servicioDepartamento.GetDepartamentosAsync();
                     ViewBag.Departamentos = new SelectList(departamentos, "IdDepartamento", "Nombre", empleado.IdDepartamento);
-                    ViewBag.Cursos = await _servicioCurso.GetCursosAsync();
+                    ViewBag.Cursos = await _servicioCurso.GetCursosAsync(); //Se pasan los cursos para la selección del checkbox
 
                     return View(empleado);
                 }
@@ -175,8 +180,9 @@ namespace APP_PRUEBA_1.Controllers
             {
                 TempData["Errores"] = ex.Message;
                 var departamentos = await _servicioDepartamento.GetDepartamentosAsync();
+                //Se pasan los departamentos para el filtro de la vista (Esto quedó obsoleto por las Data Tables)
                 ViewBag.Departamentos = new SelectList(departamentos, "IdDepartamento", "Nombre", empleado.IdDepartamento);
-                ViewBag.Cursos = await _servicioCurso.GetCursosAsync();
+                ViewBag.Cursos = await _servicioCurso.GetCursosAsync(); //Se pasan los cursos para la selección del checkbox
                 return View(empleado);
             }
         }

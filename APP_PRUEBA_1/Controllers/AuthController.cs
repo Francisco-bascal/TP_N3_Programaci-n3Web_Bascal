@@ -34,6 +34,7 @@ namespace APP_PRUEBA_1.Controllers
                     return View(login);
                 }
 
+                //Información que almacena la cookie sobre el usuario
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.NameIdentifier, resultado.Value.IdUsuario.ToString()),

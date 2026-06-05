@@ -21,12 +21,15 @@ namespace APP_PRUEBA_1.Servicios
         public async Task<Result<IEnumerable<EmpleadosPorDepartamentoVM>>> GetEmpleadosPorDepartamentoAsync()
         {
             var empleadosDesignar = await _repo.GetEmpleadosAsync();
-            var empleadosRetornar = empleadosDesignar.GroupBy(e => e.IdDepartamentoNavigation.Nombre).Select(r => new EmpleadosPorDepartamentoVM
-            {
-                Departamento = r.Key,
-                CantidadEmpleados = r.Count()
 
-            });
+            var empleadosRetornar = empleadosDesignar.GroupBy(e => e.IdDepartamentoNavigation.Nombre)
+                .Select(g => new EmpleadosPorDepartamentoVM
+                {
+                    Departamento = g.Key, //el nombre del departamento
+                    CantidadEmpleados = g.Count() //cantidad de empleados que tiene
+
+                });
+
             return Result<IEnumerable<EmpleadosPorDepartamentoVM>>.Success(empleadosRetornar);
         }
 
@@ -35,10 +38,10 @@ namespace APP_PRUEBA_1.Servicios
             var empleadosDesignar = await _repo.GetEmpleadosAsync();
             var empleadosRetornar = empleadosDesignar.GroupBy(e => e.IdDepartamentoNavigation.Nombre).Select(g => new EmpleadosAgrupadosPorDepartamentoVM
             {
-                NombreDepartamento = g.Key,
-                Empleados = g.OrderBy(e => e.Apellido).ThenBy(e => e.Nombre).ToList()
+                NombreDepartamento = g.Key, //Nombre del departamento
+                Empleados = g.OrderBy(e => e.Apellido).ThenBy(e => e.Nombre).ToList() //Lista de empleados ordenados por apellido y por nombre
             })
-            .OrderBy(g => g.NombreDepartamento).ToList();
+            .OrderBy(g => g.NombreDepartamento).ToList(); //finalmente se ordena por nombre de departamento
 
             return Result<IEnumerable<EmpleadosAgrupadosPorDepartamentoVM>>.Success(empleadosRetornar);
         }
@@ -97,6 +100,7 @@ namespace APP_PRUEBA_1.Servicios
             return Result<IEnumerable<Empleado>>.Success(empleados);
         }
 
+        //Se usa para llenar select lists de filtros de validación
         public async Task<Result<IEnumerable<Departamento>>> GetDepartamentosAsync()
         {
             var departamentos = await _repoDepartamento.GetDepartamentosAsync();

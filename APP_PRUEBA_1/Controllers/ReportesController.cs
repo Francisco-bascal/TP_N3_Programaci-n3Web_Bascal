@@ -34,11 +34,13 @@ namespace APP_PRUEBA_1.Controllers
             try
             {
                 resultado = await _servicio.GetEmpleadosPorDepartamentoAsync();
+
                 if (!resultado.IsValid)
                 {
                     TempData["Errores"] = string.Join("|", resultado.Errors);
                     return RedirectToAction("Reportes");
                 }
+
                 return View(resultado.Value);
             }
             catch (Exception ex) 
@@ -56,11 +58,13 @@ namespace APP_PRUEBA_1.Controllers
             try
             {
                 resultado = await _servicio.GetEmpleadosAgrupadosPorDepartamentoAsync();
+
                 if (!resultado.IsValid) 
                 {
                     TempData["Errores"] = string.Join("|", resultado.Errors);
                     return RedirectToAction("Reportes");
                 }
+
                 return View(resultado.Value);
             }
             catch (Exception ex) 
@@ -79,7 +83,8 @@ namespace APP_PRUEBA_1.Controllers
             try
             {
                 resultado = await _servicio.GetEmpleadosReporteFiltros(filtros);
-                departamentos = await _servicio.GetDepartamentosAsync();
+                departamentos = await _servicio.GetDepartamentosAsync(); //Para cargar los departamentos para los filtros
+
                 if (!resultado.IsValid) 
                 {
                     TempData["Errores"] = string.Join("|", resultado.Errors);
@@ -109,8 +114,10 @@ namespace APP_PRUEBA_1.Controllers
             Result<EmpleadosPorCursoVM> resultado;
             try
             {
+                //Se pasan los cursos para el SelectList de la generación de reportes
                 ViewBag.Cursos = (await _servicio.GetCursosAsync()).Value;
 
+                //Si no hay un curso seleccionado para la generación del reporte se hace un early return a la vista vacía
                 if (!idCurso.HasValue)
                     return View();
 

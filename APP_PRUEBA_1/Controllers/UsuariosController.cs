@@ -177,6 +177,7 @@ namespace APP_PRUEBA_1.Controllers
                     TempData["Errores"] = string.Join("|", resultado.Errors);
                     return RedirectToAction("GetUsuarios");
                 }
+
                 TempData["Exito"] = "Usuario eliminado correctamente";
                 return RedirectToAction("GetUsuarios");
             }
