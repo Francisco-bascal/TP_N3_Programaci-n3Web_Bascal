@@ -47,6 +47,8 @@ namespace APP_PRUEBA_1.Controllers
 
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
+                TempData["Exito"] = "Usuario Logueado Correctamente";
+
                 return RedirectToAction("Index", "Home");
             }
             catch (Exception ex) 
